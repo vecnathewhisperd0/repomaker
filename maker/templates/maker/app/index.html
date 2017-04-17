@@ -20,9 +20,7 @@
 		<ul class="mdc-list mdc-list--dense">
 			<li class="mdc-list-item">
 				<i class="mdc-list-item__start-detail material-icons">info_outline</i>
-				{% blocktrans with package_id=app.package_id %}
-				Package ID: {{ package_id }}
-				{% endblocktrans %}
+				{% blocktrans with package_id=app.package_id %}Package ID: {{ package_id }}{% endblocktrans %}
 			</li>
 			<li class="mdc-list-item">
 				<i class="mdc-list-item__start-detail material-icons">style</i>
@@ -36,38 +34,28 @@
 			{% if app.website %}
 			<li class="mdc-list-item">
 				<i class="mdc-list-item__start-detail material-icons">insert_link</i>
-				{% blocktrans with website=app.website|urlize %}
-				Website: {{ website }}
-				{% endblocktrans %}
+				{% blocktrans with website=app.website|urlize %}Website: {{ website }}{% endblocktrans %}
 			</li>
 			{% endif %}
 			{% if app.description %}
 			<li class="mdc-list-item" style="overflow: auto;">
 				<i class="mdc-list-item__start-detail material-icons">description</i>
-				{% blocktrans with description=app.description %}
-				Description: {{ description }}
-				{% endblocktrans %}
+				{% blocktrans with description=app.description %}Description: {{ description }}{% endblocktrans %}
 			</li>
 			{% endif %}
 			{% if apks %}
 			<li class="mdc-list-item">
 				<i class="mdc-list-item__start-detail material-icons">gesture</i>
-				{% blocktrans with signature=apks.0.apk.signature %}
-				Signature: {{ signature }}
-				{% endblocktrans %}
+				{% blocktrans with signature=apks.0.apk.signature %}Signature: {{ signature }}{% endblocktrans %}
 			</li>
 			{% endif %}
 			<li class="mdc-list-item">
 				<i class="mdc-list-item__start-detail material-icons">watch_later</i>
-				{% blocktrans with date=app.added_date|date:"SHORT_DATE_FORMAT" %}
-				Added: {{ date }}
-				{% endblocktrans %}
+				{% blocktrans with date=app.added_date|date:"SHORT_DATE_FORMAT" %}Added: {{ date }}{% endblocktrans %}
 			</li>
 			<li class="mdc-list-item">
 				<i class="mdc-list-item__start-detail material-icons">update</i>
-				{% blocktrans with date_1=app.last_updated_date|naturaltime date_2=app.last_updated_date|date:"SHORT_DATE_FORMAT" %}
-				Last Updated: {{ date_1 }} ({{ date_2 }})
-				{% endblocktrans %}
+				{% blocktrans with date_1=app.last_updated_date|naturaltime date_2=app.last_updated_date|date:"SHORT_DATE_FORMAT" %}Last Updated: {{ date_1 }} ({{ date_2 }}){% endblocktrans %}
 			</li>
 		</ul>
 

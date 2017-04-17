@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-16 12:01+0000\n"
+"POT-Creation-Date: 2017-04-17 09:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,7 +73,7 @@ msgid ""
 msgstr ""
 
 #: maker/templates/maker/app/delete.html:5
-#: maker/templates/maker/app/index.html:92
+#: maker/templates/maker/app/index.html:80
 msgid "Delete App"
 msgstr ""
 
@@ -101,66 +101,48 @@ msgstr ""
 
 #: maker/templates/maker/app/index.html:23
 #, python-format
-msgid ""
-"\n"
-"\t\t\t\tPackage ID: %(package_id)s\n"
-"\t\t\t\t"
+msgid "Package ID: %(package_id)s"
 msgstr ""
 
-#: maker/templates/maker/app/index.html:34
+#: maker/templates/maker/app/index.html:32
 #, python-format
 msgid "Categories: %(category)s"
 msgstr ""
 
-#: maker/templates/maker/app/index.html:39
+#: maker/templates/maker/app/index.html:37
 #, python-format
-msgid ""
-"\n"
-"\t\t\t\tWebsite: %(website)s\n"
-"\t\t\t\t"
+msgid "Website: %(website)s"
 msgstr ""
 
-#: maker/templates/maker/app/index.html:47
+#: maker/templates/maker/app/index.html:43
 #, python-format
-msgid ""
-"\n"
-"\t\t\t\tDescription: %(description)s\n"
-"\t\t\t\t"
+msgid "Description: %(description)s"
 msgstr ""
 
-#: maker/templates/maker/app/index.html:55
+#: maker/templates/maker/app/index.html:49
 #, python-format
-msgid ""
-"\n"
-"\t\t\t\tSignature: %(signature)s\n"
-"\t\t\t\t"
+msgid "Signature: %(signature)s"
 msgstr ""
 
-#: maker/templates/maker/app/index.html:62
+#: maker/templates/maker/app/index.html:54
 #, python-format
-msgid ""
-"\n"
-"\t\t\t\tAdded: %(date)s\n"
-"\t\t\t\t"
+msgid "Added: %(date)s"
 msgstr ""
 
-#: maker/templates/maker/app/index.html:68
+#: maker/templates/maker/app/index.html:58
 #, python-format
-msgid ""
-"\n"
-"\t\t\t\tLast Updated: %(date_1)s (%(date_2)s)\n"
-"\t\t\t\t"
+msgid "Last Updated: %(date_1)s (%(date_2)s)"
 msgstr ""
 
-#: maker/templates/maker/app/index.html:78
+#: maker/templates/maker/app/index.html:66
 msgid "Edit App Details"
 msgstr ""
 
-#: maker/templates/maker/app/index.html:85
+#: maker/templates/maker/app/index.html:73
 msgid "Add Screenshot"
 msgstr ""
 
-#: maker/templates/maker/app/index.html:101
+#: maker/templates/maker/app/index.html:89
 msgid "Versions"
 msgstr ""
 
@@ -170,13 +152,10 @@ msgstr ""
 
 #: maker/templates/maker/index.html:19
 #, python-format
-msgid ""
-"\n"
-"\t\t\t\t\tLast published: %(date)s.\n"
-"\t\t\t\t\t"
+msgid "Last published: %(date)s."
 msgstr ""
 
-#: maker/templates/maker/index.html:30
+#: maker/templates/maker/index.html:28
 msgid "No repositories are available."
 msgstr ""
 

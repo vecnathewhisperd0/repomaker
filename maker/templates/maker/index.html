@@ -16,9 +16,7 @@
 				<img src="{{ repo.icon.url }}"/>
 				<h1 class="mdc-card__title mdc-card__title">{{ repo.name }}</h1>
 				<h2 class="mdc-card__subtitle">
-					{% blocktrans with date=repo.last_publication_date|naturaltime|default:"Never" %}
-					Last published: {{ date }}.
-					{% endblocktrans %}
+					{% blocktrans with date=repo.last_publication_date|naturaltime|default:"Never" %}Last published: {{ date }}.{% endblocktrans %}
 				</h2>
 			</section>
 			<section class="mdc-card__supporting-text">{{ repo.description }}</section>
