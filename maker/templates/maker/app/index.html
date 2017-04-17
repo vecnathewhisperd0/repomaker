@@ -94,12 +94,18 @@
 			<li><h4>{{ pointer.apk.version_name }} <span style="font-weight: normal; font-size: 75%;">({{ pointer.apk.version_code }})</span></h4>
 				{% if pointer.file %}
 				<ul class="mdc-list mdc-list--dense">
-					<li class="mdc-list-item">Size: {{ pointer.apk.size|filesizeformat }}</li>
-					<li class="mdc-list-item">File: {{ pointer.file.name }}</li>
-					<li class="mdc-list-item">Hash ({{ pointer.apk.hash_type }}): {{ pointer.apk.hash }}</li>
+					<li class="mdc-list-item">
+						{% blocktrans with size=pointer.apk.size|filesizeformat %}Size: {{ size }}{% endblocktrans %}
+					</li>
+					<li class="mdc-list-item">
+						{% blocktrans with file=pointer.file.name %}File: {{ file }}{% endblocktrans %}
+					</li>
+					<li class="mdc-list-item">
+						{% blocktrans with hash_type=pointer.apk.hash_type hash=pointer.apk.hash %}Hash ({{ hash_type }}): {{ hash }}{% endblocktrans %}
+					</li>
 				</ul>
 				{% else %}
-				<em>APK is still downloading...</em>
+				<em>{% trans 'APK is still downloading...' %}</em>
 				{% endif %}
 			</li>
 			{% endfor %}
