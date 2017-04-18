@@ -1,7 +1,16 @@
 {% extends "../base.html" %}
+{% load i18n %}
 {% load sass_tags %}
 
-{% block title %}{% if object %}Update{% else %}Add{% endif %} {{ storage_name }}{% endblock %}
+{% if object %}
+{% trans "Update" as action %}
+{% else %}
+{% trans "Add" as action %}
+{% endif %}
+
+{% block title %}
+{% blocktrans %}{{ action }} {{ storage_name }}{% endblocktrans %}
+{% endblock %}
 
 {% block head %}
 <link href="{% sass_src 'maker/css/forms.scss' %}" rel="stylesheet" type="text/css" media="all">
@@ -10,13 +19,13 @@
 
 {% block content %}
 
-<h1>{% if object %}Update{% else %}Add{% endif %} {{ storage_name }}</h1>
+<h1>{% blocktrans %}{{ action }} {{ storage_name }}{% endblocktrans %}</h1>
 
 <div class="rm-form">
 	<form action="" method="post">
 		{% csrf_token %}
 		{% include '../form.html' %}
-		<input type="submit" value="{% if object %}Update{% else %}Add{% endif %}"/>
+		<input type="submit" value="{% blocktrans %}{{ action }} {{ storage_name }}{% endblocktrans %}"/>
 	</form>
 </div>
 
