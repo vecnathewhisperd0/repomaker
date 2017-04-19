@@ -41,8 +41,6 @@ To add a new translation,
 run `python3 manage.py makemessages -l <lg>`
 where `<lg>` is the language code, e.g. `de`.
 
-`python3 manage.py makemessages -a`
-
 # License
 
 This program is free software: you can redistribute it and/or modify it
