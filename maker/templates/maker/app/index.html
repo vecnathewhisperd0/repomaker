@@ -25,11 +25,10 @@
 			<li class="mdc-list-item">
 				<i class="mdc-list-item__start-detail material-icons">style</i>
 					{% if app.category.exists %}
-					{{ app.category.all|join:", " as category }}
+					{% blocktrans with category=app.category.all|join:", "%}Categories: {{ category }}{% endblocktrans %}
 					{% else %}
-					{{ "None" as category }}
+					{% blocktrans with category=app.category.all|join:", "%}Categories: {{ category }}{% endblocktrans %}
 					{% endif %}
-					{% blocktrans %}Categories: {{ category }}{% endblocktrans %}
 			</li>
 			{% if app.website %}
 			<li class="mdc-list-item">
