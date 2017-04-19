@@ -2,14 +2,12 @@
 {% load i18n %}
 {% load sass_tags %}
 
-{% if object %}
-{% trans "Update" as action %}
-{% else %}
-{% trans "Add" as action %}
-{% endif %}
-
 {% block title %}
-{% blocktrans %}{{ action }} {{ storage_name }}{% endblocktrans %}
+{% if object %}
+{% blocktrans %}Update {{ storage_name }}{% endblocktrans %}
+{% else %}
+{% blocktrans %}Add {{ storage_name }}{% endblocktrans %}
+{% endif %}
 {% endblock %}
 
 {% block head %}
@@ -19,13 +17,23 @@
 
 {% block content %}
 
-<h1>{% blocktrans %}{{ action }} {{ storage_name }}{% endblocktrans %}</h1>
+<h1>
+	{% if object %}
+	{% blocktrans %}Update {{ storage_name }}{% endblocktrans %}
+	{% else %}
+	{% blocktrans %}Add {{ storage_name }}{% endblocktrans %}
+	{% endif %}
+</h1>
 
 <div class="rm-form">
 	<form action="" method="post">
 		{% csrf_token %}
 		{% include '../form.html' %}
-		<input type="submit" value="{% blocktrans %}{{ action }} {{ storage_name }}{% endblocktrans %}"/>
+		{% if object %}
+		<input type="submit" value="{% blocktrans %}Update {{ storage_name }}{% endblocktrans %}"/>
+		{% else %}
+		<input type="submit" value="{% blocktrans %}Add {{ storage_name }}{% endblocktrans %}"/>
+		{% endif %}
 	</form>
 </div>
 

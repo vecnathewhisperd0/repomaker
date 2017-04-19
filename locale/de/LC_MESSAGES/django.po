@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-19 14:57+0000\n"
+"POT-Creation-Date: 2017-04-19 15:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,7 +61,6 @@ msgstr ""
 
 #: maker/templates/maker/app/add.html:45
 #: maker/templates/maker/repo/add.html:20
-#: maker/templates/maker/storage/form.html:8
 msgid "Add"
 msgstr "Hinzufügen"
 
@@ -282,15 +281,19 @@ msgstr "Bestätigen"
 msgid "Are you sure you want to remove the remote storage at \"%(object)s\"?"
 msgstr ""
 
-#: maker/templates/maker/storage/form.html:6
-msgid "Update"
-msgstr ""
-
-#: maker/templates/maker/storage/form.html:12
+#: maker/templates/maker/storage/form.html:7
 #: maker/templates/maker/storage/form.html:22
-#: maker/templates/maker/storage/form.html:28
+#: maker/templates/maker/storage/form.html:33
+#, fuzzy, python-format
+#| msgid "Edit %(app.name)s"
+msgid "Update %(storage_name)s"
+msgstr "%(app.name)s bearbeiten"
+
+#: maker/templates/maker/storage/form.html:9
+#: maker/templates/maker/storage/form.html:24
+#: maker/templates/maker/storage/form.html:35
 #, python-format
-msgid "%(action)s %(storage_name)s"
+msgid "Add %(storage_name)s"
 msgstr ""
 
 #: maker/views/app.py:20
