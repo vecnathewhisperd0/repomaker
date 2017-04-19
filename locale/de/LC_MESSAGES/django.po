@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-19 14:49+0000\n"
+"POT-Creation-Date: 2017-04-19 14:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -345,15 +345,15 @@ msgstr ""
 msgid "Other regions are currently not supported."
 msgstr ""
 
-#: maker/views/screenshot.py:15
+#: maker/views/screenshot.py:16
 msgid "Language Code"
 msgstr ""
 
-#: maker/views/screenshot.py:16
+#: maker/views/screenshot.py:17
 msgid "Select Screenshot for upload"
 msgstr "Wähle einen Screenshot zum Hochladen aus"
 
-#: maker/views/screenshot.py:19
+#: maker/views/screenshot.py:20
 msgid "Leave this at 'en-US' if in doubt."
 msgstr ""
 
