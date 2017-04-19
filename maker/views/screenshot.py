@@ -12,7 +12,8 @@ class ScreenshotForm(ModelForm):
         model = Screenshot
         fields = ['language_tag', 'type', 'file']
         labels = {
-            'language_tag': _('Language Code'),  # TODO would be nice to have a language dropdown here
+            # TODO would be nice to have a language dropdown here
+            'language_tag': _('Language Code'),
             'file': _('Select Screenshot for upload'),
         }
         help_texts = {
