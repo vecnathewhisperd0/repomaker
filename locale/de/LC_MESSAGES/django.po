@@ -34,15 +34,15 @@ msgstr ""
 
 #: maker/templates/maker/app/add.html:5
 msgid "Add App"
-msgstr ""
+msgstr "App hinzufügen"
 
 #: maker/templates/maker/app/add.html:14
 msgid "Add new App"
-msgstr ""
+msgstr "Neue App hinzufügen"
 
 #: maker/templates/maker/app/add.html:20
 msgid "Upload APK"
-msgstr ""
+msgstr "APK hochladen"
 
 #: maker/templates/maker/app/add.html:29
 msgid "Remote Repositories"
@@ -50,7 +50,7 @@ msgstr ""
 
 #: maker/templates/maker/app/add.html:31
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 #: maker/templates/maker/app/add.html:40
 msgid ""
@@ -60,7 +60,7 @@ msgstr ""
 
 #: maker/templates/maker/app/add.html:45
 msgid "Add"
-msgstr ""
+msgstr "Hinzufügen"
 
 #: maker/templates/maker/app/add.html:64
 msgid "There are no apps from remote repositories."
@@ -75,7 +75,7 @@ msgstr ""
 #: maker/templates/maker/app/delete.html:5
 #: maker/templates/maker/app/index.html:80
 msgid "Delete App"
-msgstr ""
+msgstr "App löschen"
 
 #: maker/templates/maker/app/delete.html:18
 #, python-format
@@ -84,20 +84,20 @@ msgstr ""
 
 #: maker/templates/maker/app/delete.html:19
 msgid "Confirm"
-msgstr ""
+msgstr "Bestätigen"
 
 #: maker/templates/maker/app/edit.html:5
 msgid "Edit App"
-msgstr ""
+msgstr "App bearbeiten"
 
 #: maker/templates/maker/app/edit.html:15
 #, python-format
 msgid "Edit %(app.name)s"
-msgstr ""
+msgstr "%(app.name)s bearbeiten"
 
 #: maker/templates/maker/app/edit.html:21
 msgid "Save Changes"
-msgstr ""
+msgstr "Änderungen speichern"
 
 #: maker/templates/maker/app/index.html:23
 #, python-format
@@ -107,32 +107,32 @@ msgstr ""
 #: maker/templates/maker/app/index.html:32
 #, python-format
 msgid "Categories: %(category)s"
-msgstr ""
+msgstr "Kategorien: %(category)s"
 
 #: maker/templates/maker/app/index.html:37
 #, python-format
 msgid "Website: %(website)s"
-msgstr ""
+msgstr "Webseite: %(website)s"
 
 #: maker/templates/maker/app/index.html:43
 #, python-format
 msgid "Description: %(description)s"
-msgstr ""
+msgstr "Beschreibung: %(description)s"
 
 #: maker/templates/maker/app/index.html:49
 #, python-format
 msgid "Signature: %(signature)s"
-msgstr ""
+msgstr "Signatur: %(signature)s"
 
 #: maker/templates/maker/app/index.html:54
 #, python-format
 msgid "Added: %(date)s"
-msgstr ""
+msgstr "Hinzugefügt: %(date)s"
 
 #: maker/templates/maker/app/index.html:58
 #, python-format
 msgid "Last Updated: %(date_1)s (%(date_2)s)"
-msgstr ""
+msgstr "Zuletzt aktualisiert: %(date_1)s (%(date_2)s)"
 
 #: maker/templates/maker/app/index.html:66
 msgid "Edit App Details"
@@ -140,11 +140,11 @@ msgstr ""
 
 #: maker/templates/maker/app/index.html:73
 msgid "Add Screenshot"
-msgstr ""
+msgstr "Screenshot hinzufügen"
 
 #: maker/templates/maker/app/index.html:89
 msgid "Versions"
-msgstr ""
+msgstr "Versionen"
 
 #: maker/templates/maker/index.html:5
 msgid "Repository List"
@@ -217,7 +217,7 @@ msgstr ""
 
 #: maker/views/screenshot.py:16
 msgid "Select Screenshot for upload"
-msgstr ""
+msgstr "Wähle einen Screenshot zum Hochladen aus"
 
 #: maker/views/screenshot.py:19
 msgid "Leave this at 'en-US' if in doubt."
@@ -225,7 +225,7 @@ msgstr ""
 
 #: maker/views/sshstorage.py:21
 msgid "User Name"
-msgstr ""
+msgstr "Benutzername"
 
 #: maker/views/sshstorage.py:22
 msgid "URL"
