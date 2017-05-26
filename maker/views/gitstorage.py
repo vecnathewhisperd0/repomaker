@@ -64,7 +64,7 @@ class GitUrlValidationMixin(SshKeyMixin):
 
         # assign hostname and path to the GitStorage object
         form.instance.host = hostname
-        form.instance.path = path
+        form.instance.path = folder name
 
         # try to generate the F-Droid repo URL from the git repo URL
         url = fdroidserver.index.get_mirror_service_url(form.cleaned_data['ssh_url'])
