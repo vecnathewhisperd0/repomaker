@@ -172,6 +172,153 @@ function setHiddenOfElement(element, hidden) {
 }
 
 /**
+ * Pagination
+ */
+var rmPaginationPage = null
+
+var mdlBody = document.querySelector('.mdl-layout__content')
+mdlBody.addEventListener("scroll", function () {
+    if (mdlBody.scrollHeight - window.innerHeight -
+            mdlBody.scrollTop <= 800) {
+        var pagination = document.querySelector('.rm-pagination')
+        if (pagination !== null) {
+            handlePagination(pagination, window.location.href)
+        }
+    }
+}, false)
+
+function handlePagination(pagination, urlString) {
+    if (pagination.hidden || rmPaginationPage === 0) {
+        return
+    }
+    pagination.hidden = true
+    var url = new URL(urlString)
+    if (rmPaginationPage === null) {
+        rmPaginationPage = 2
+        // Handle case where user is on ?page=x, e.g. due to slow loading of page
+        pageParam = url.searchParams.get('page')
+        if (pageParam !== null && pageParam.length !== 0) {
+            rmPaginationPage = parseInt(pageParam) + 1
+        }
+    }
+    searchParam = url.searchParams.get('search')
+    if (searchParam === null || searchParam.length === 0) {
+        urlString = urlString.split('?')[0] + '?page=' + rmPaginationPage
+    }
+    else {
+        urlString = urlString.split('?')[0] + '?search=' + searchParam + '&page=' + rmPaginationPage
+    }
+    var request = new XMLHttpRequest()
+    request.onreadystatechange = function() {
+        if (request.readyState === 4) {
+            if (request.status !== 404) {
+                appendApps(request)
+                pagination.hidden = false
+                rmPaginationPage = rmPaginationPage + 1
+            }
+            else {
+                rmPaginationPage = 0
+            }
+        }
+
+    }
+    request.open("GET", new URL(urlString), true) // true for asynchronous
+    request.setRequestHeader('X-REQUESTED-WITH', 'XMLHttpRequest') // For Django's request.is_ajax()
+    request.send()
+}
+
+function appendApps(request) {
+    var apps = JSON.parse(request.response)
+    var appList = document.querySelector('.rm-app-add-apps')
+    var appCardTemplate = document.querySelector('.rm-app-card')
+    for (app in apps) {
+        var newAppCard = appCardTemplate.cloneNode(true)
+        newAppCard = putAppInformation(apps[app], newAppCard)
+        appList.appendChild(newAppCard)
+    }
+}
+
+var jsonHtmlRelation = {
+    'rm-app-card-title': 'name',
+    'rm-app-card-summary': 'summary',
+    'rm-app-card-description': 'description',
+    'rm-app-card-updated': 'last_updated_date',
+    'rm-app-card-left': 'icon',
+    'rm-app-card-footer-action': 'id',
+    'rm-app-card-categories': 'categories',
+}
+
+function putAppInformation(app, appCard) {
+    for (rel in jsonHtmlRelation) {
+        if (rel === 'rm-app-card-updated') {
+            date = new Date(app[jsonHtmlRelation[rel]])
+            appCard.querySelector('.' + rel).innerHTML = formatDate(date)
+            continue
+        }
+        if (rel === 'rm-app-card-left') {
+            appCard.querySelector('.' + rel).style.backgroundImage =
+                'url("/media/' + app[jsonHtmlRelation[rel]] + '")'
+            continue
+        }
+        if (rel === 'rm-app-card-description') {
+            // Strip HTML and truncate
+            appCard.querySelector('.' + rel).innerHTML =
+                app[jsonHtmlRelation[rel]].replace(/<(?:.|\n)*?>/gm, '').substring(0, 168) + '...'
+            continue
+        }
+        if (rel === 'rm-app-card-footer-action') {
+            var appId = app[jsonHtmlRelation[rel]]
+            var element = appCard.querySelector('.' + rel)
+
+            // Set ID
+            element.id = rel + '--' + appId
+
+            var repoId = element.pathname.split('/')[2]
+            var remoteRepoId = app['repo_id']
+
+            // Set link
+            element.href = '/repo/' + repoId + '/app/remote/' + remoteRepoId + '/add/' + appId
+
+            // Add on-click listener and remove HTML attribute
+            element.addEventListener('click', function(event) {
+                addRemoteApp(event, repoId, remoteRepoId, appId)
+            })
+            element.removeAttribute('onclick')
+
+            // Set ID of button
+            element.querySelector('button').id = rel + '--' + appId + '-button'
+            continue
+        }
+        if (rel === 'rm-app-card-categories') {
+            // TODO: Add categories
+            var nodes = appCard.querySelector('.' + rel).childNodes;
+            for(var i = 0; i < nodes.length; i++) {
+                console.log
+                nodes[i].hidden = true
+            }
+            continue
+        }
+        appCard.querySelector('.' + rel).innerHTML = app[jsonHtmlRelation[rel]]
+    }
+    return appCard
+}
+
+function formatDate(date) {
+    var monthNames = [
+        "Jan.", "Feb.", "March",
+        "April", "May", "June", "July",
+        "Aug.", "Sep.", "Oct.",
+        "Nov.", "Dec."
+    ];
+
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
+
+    return monthNames[monthIndex] + ' ' + day + ', ' + year;
+}
+
+/**
  * Search
  */
 var searchInput = document.querySelector('.rm-app-add-filters-search-input')

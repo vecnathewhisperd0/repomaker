@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.db.utils import OperationalError, IntegrityError
 from django.forms import FileField, ImageField, ClearableFileInput
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import UpdateView, DeleteView
@@ -37,6 +37,12 @@ class AppAddView(RepositoryAuthorizationMixin, ListView):
     context_object_name = 'apps'
     paginate_by = 15
     template_name = "maker/app/add.html"
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            self.object_list = self.get_queryset()  # pylint: disable=attribute-defined-outside-init
+            return JsonResponse(list(self.get_context_data(**kwargs)['apps'].values()), safe=False)
+        return super(AppAddView, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
         qs = RemoteApp.objects.filter(repo__users__id=self.request.user.id)
