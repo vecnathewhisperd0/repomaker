@@ -31,3 +31,11 @@ repomaker-static/
 /dist/
 /repomaker.egg-info/
 /docker/data
+
+# Docker
+.env
+docker-compose.yml
+Makefile
+httpd-foreground
+repomaker/settings_docker.py
+wait-for
