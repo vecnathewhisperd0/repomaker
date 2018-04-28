@@ -44,7 +44,7 @@ class GitUrlValidationMixin(SshKeyMixin):
             return self.form_invalid(form)
 
         # strip the .git ending from the URL
-        ssh_url = ssh_url.replace('.git', '')
+        ssh_url = ssh_url.rstrip('.git')
 
         # check that ssh_url includes a path
         url_error = _("This URL is invalid. Please copy the exact SSH URL of your git repository.")
