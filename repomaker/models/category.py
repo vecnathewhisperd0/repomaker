@@ -5,6 +5,7 @@ from django.db import models
 class Category(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=64)
+    color = models.CharField(max_length=8, blank=True, default='')
 
     def __str__(self):
         return str(self.name)

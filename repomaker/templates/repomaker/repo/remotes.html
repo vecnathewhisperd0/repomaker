@@ -68,16 +68,18 @@
 						Category ({{ count}})
 						{% endblocktrans %}
 					</span>
-						{% if category %}
-						<span class="rm-app-add-filters-category-chip">
-						<span class="rm-app-add-filters-category-chip-title">{{ category.name }}</span>
+					{% if category %}
+					<span class="rm-app-add-filters-category-chip" {% if category.color %}style="background-color: #{{ category.color }}"{% endif %}>
+						<span class="rm-app-add-filters-category-chip-title">
+							{{ category.name }}
+						</span>
 						<a type="button" class="mdl-chip__action"
 						   href="{% if remote_repo %}{% url 'add_app' repo.id remote_repo.id %}{% else %}{% url 'add_app' repo.id %}{% endif %}?{{ search_params }}">
 							<i class="material-icons">clear</i>
 						</a>
 					</span>
-						{% else %}
-						<span id="rm-app-add-filters-category" class="rm-app-add-filters-category-chip--all">
+					{% else %}
+					<span id="rm-app-add-filters-category" class="rm-app-add-filters-category-chip--all">
 						<span class="rm-app-add-filters-category-chip-title">{% trans 'All' %}</span>
 					</span>
 					<div class="rm-app-add-filters-category-menu mdl-js-menu mdl-js-ripple-effect" data-mdl-for="rm-app-add-filters-category">
