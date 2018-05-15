@@ -6,6 +6,26 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>{{ repo.name }}</title>
 	<link href="{% sass_src 'repomaker/css/repo/page.scss' %}" rel="stylesheet" type="text/css" media="all">
+
+	<meta property="og:title" content="{{ repo.name }}" />
+	<meta property="og:description" content="{{ repo.description }}" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="{{ repo.get_fingerprint_url }}" />
+	<meta property="og:image" content="{{ repo.icon|default:"f-droid.png" }}" />
+	<meta property="og:site_name" content="F-Droid" />
+
+	<script type="application/ld+json">
+		{
+			"@context": "http://schema.org",
+			"@type": "Service",
+			"name": "{{ repo.name }}",
+			"description": "{{ repo.description }}",
+			"image": "{{ repo.icon|default:"f-droid.png" }}",
+			"url": "{{ repo.get_fingerprint_url }}",
+			"identifier": "{{ repo.fingerprint }}",
+			"logo": "{{ assets }}f-droid.png"
+		}
+	</script>
 </head>
 
 <body>
