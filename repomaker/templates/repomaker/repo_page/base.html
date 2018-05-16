@@ -11,19 +11,18 @@
 	<meta property="og:description" content="{{ repo.description }}" />
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="{{ repo.get_fingerprint_url }}" />
-	<meta property="og:image" content="{{ repo.icon|default:"f-droid.png" }}" />
+	<meta property="og:image" content="{{ repo.icon_url }}" />
 	<meta property="og:site_name" content="F-Droid" />
 
 	<script type="application/ld+json">
 		{
 			"@context": "http://schema.org",
-			"@type": "Service",
+			"@type": "Thing",
 			"name": "{{ repo.name }}",
 			"description": "{{ repo.description }}",
-			"image": "{{ repo.icon|default:"f-droid.png" }}",
+			"image": "{{ repo.icon_url }}",
 			"url": "{{ repo.get_fingerprint_url }}",
-			"identifier": "{{ repo.fingerprint }}",
-			"logo": "{{ assets }}f-droid.png"
+			"identifier": "{{ repo.fingerprint }}"
 		}
 	</script>
 </head>
