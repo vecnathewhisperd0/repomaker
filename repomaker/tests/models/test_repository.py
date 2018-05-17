@@ -6,6 +6,7 @@ from unittest.mock import patch
 
 import sass_processor.processor
 import sass_processor.storage
+from with_asserts.mixin import AssertHTMLMixin
 from background_task.models import Task
 from django.conf import settings
 from django.core.files import File
@@ -18,6 +19,7 @@ from repomaker.models.app import VIDEO, APK
 from repomaker.models.repository import REPO_DEFAULT_ICON
 from repomaker.storage import get_repo_file_path, REPO_DIR
 from repomaker.tasks import PRIORITY_REPO
+
 
 from .. import datetime_is_recent, fake_repo_create, RmTestCase
 
@@ -469,7 +471,7 @@ class RepositoryTestCase(RmTestCase):
         self.assertEqual(0, ApkPointer.objects.all().count())
 
 
-class RepositoryPageTestCase(RmTestCase):
+class RepositoryPageTestCase(RmTestCase, AssertHTMLMixin):
     """
     This is its own testcase,
     because overriding variables such as STATIC_ROOT can cause sass to crash.
@@ -521,3 +523,60 @@ class RepositoryPageTestCase(RmTestCase):
         style_abs_path = os.path.join(settings.STATIC_ROOT, 'repomaker', 'css', 'repo', 'page.css')
         self.assertTrue(os.path.isfile(style_abs_path))
         self.assertTrue(os.path.getsize(style_abs_path) > 200)
+
+    @patch('repomaker.models.repository.Repository._copy_page_assets')
+    def test_generate_page_renders_open_graph_data(self, _copy_page_assets):
+        repo = self.repo
+
+        # a hack to enable the SASS processor for these tests
+        sass_processor.processor.SassProcessor.processor_enabled = True
+        sass_processor.processor.SassProcessor.storage = sass_processor.storage.SassFileStorage()
+
+        # creating repository directory is necessary because neither create nor update was called
+        os.makedirs(repo.get_repo_path())
+
+        # add two apps in two different languages
+        app1 = App.objects.create(repo=repo, package_id='first', name='TestApp')
+        app1.translate('es')
+        app1.summary = 'TestSummary'
+        app1.description = 'TestDesc'
+        app1.save()
+        app2 = App.objects.create(repo=repo, package_id='second', name='AnotherTestApp')
+        app2.translate('de')
+        app2.summary = 'AnotherTestSummary'
+        app2.description = 'AnotherTestDesc'
+        app2.save()
+
+        repo._generate_page()  # pylint: disable=protected-access
+
+        # make sure that SASS processor gets disabled again as soon as it is no longer needed
+        sass_processor.processor.SassProcessor.processor_enabled = False
+
+        # assert that the repo homepage has been created and contains the app
+        page_abs_path = os.path.join(settings.MEDIA_ROOT, get_repo_file_path(repo, 'index.html'))
+
+        with open(page_abs_path, 'r') as repo_page:
+            repo_page_string = repo_page.read()
+
+            print(repo_page_string)
+
+            with self.assertHTML(repo_page_string, 'head meta[property="og:title"]') as (elem,):
+                self.assertEqual('Test Name', elem.attrib['content'])
+
+            with self.assertHTML(repo_page_string, 'head meta[property="og:description"]') as (elem,):
+                self.assertEqual('Test Description', elem.attrib['content'])
+
+            with self.assertHTML(repo_page_string, 'head meta[property="og:type"]') as (elem,):
+                self.assertEqual('website', elem.attrib['content'])
+
+            with self.assertHTML(repo_page_string, 'head meta[property="og:url"]') as (elem,):
+                self.assertEqual('https://example.org?fingerprint=foongerprint', elem.attrib['content'])
+
+            with self.assertHTML(repo_page_string, 'head meta[property="og:image"]') as (elem,):
+                self.assertEqual('/static/repomaker/images/default-repo-icon.png', elem.attrib['content'])
+
+            with self.assertHTML(repo_page_string, 'head meta[property="og:site_name"]') as (elem,):
+                self.assertEqual('F-Droid', elem.attrib['content'])
+
+            with self.assertHTML(repo_page_string, 'head meta[property="og:site_name"]') as (elem,):
+                self.assertEqual('Wring site name', elem.attrib['content'])
