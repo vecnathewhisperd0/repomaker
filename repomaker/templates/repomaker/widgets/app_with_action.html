@@ -11,7 +11,10 @@ onclick="window.location.href = '{{ url }}'"
 <div class="rm-app-card-footer">
 	<div class="rm-app-card-categories">
 		{% for category in app.category.all %}
-		<span class="rm-app-card-category-chip mdl-chip">
+		<span
+			class="rm-app-card-category-chip mdl-chip"
+			{% if category.color %}style="background-color: #{{ category.color }}"{% endif %}
+		>
 			<span class="rm-app-card-category-text mdl-chip__text">{{ category }}</span>
 		</span>
 		{% endfor %}
