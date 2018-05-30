@@ -11,7 +11,7 @@
 	<meta property="og:description" content="{{ repo.description }}" />
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="{{ repo.get_fingerprint_url }}" />
-	<meta property="og:image" content="{{ repo.icon_url }}" />
+	<meta property="og:image" content="{{ base_url }}{{ repo.icon_url }}" />
 	<meta property="og:site_name" content="F-Droid" />
 
 	<script type="application/ld+json">
@@ -20,7 +20,7 @@
 			"@type": "Thing",
 			"name": "{{ repo.name }}",
 			"description": "{{ repo.description }}",
-			"image": "{{ repo.icon_url }}",
+			"image": "{{ base_url }}{{ repo.icon_url }}",
 			"url": "{{ repo.get_fingerprint_url }}",
 			"identifier": "{{ repo.fingerprint }}"
 		}

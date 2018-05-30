@@ -1,5 +1,6 @@
 import logging
 import os
+from urllib.parse import urlparse
 from io import BytesIO
 from shutil import copy, rmtree
 
@@ -193,12 +194,19 @@ class Repository(AbstractRepository):
         if not self.get_fingerprint_url():
             return
 
+        repo_url = urlparse(self.get_fingerprint_url())
+
+        template_vars = {
+            'repo': self,
+            'base_url': repo_url.scheme + '://' + repo_url.netloc
+        }
+
         # Render page to string
-        repo_page_string = render_to_string('repomaker/repo_page/index.html', {'repo': self})
+        repo_page_string = render_to_string('repomaker/repo_page/index.html', template_vars)
         repo_page_string = repo_page_string.replace('/static/repomaker/css/repo/', 'assets/')
 
         # Render qr_code page to string
-        qr_page_string = render_to_string('repomaker/repo_page/qr_code.html', {'repo': self})
+        qr_page_string = render_to_string('repomaker/repo_page/qr_code.html', template_vars)
         qr_page_string = qr_page_string.replace('/static/repomaker/css/repo/', '')
 
         with open(os.path.join(self.get_repo_path(), 'index.html'), 'w', encoding='utf8') as f:
