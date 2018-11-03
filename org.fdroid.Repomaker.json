@@ -1,0 +1,93 @@
+{
+    "app-id": "org.fdroid.Repomaker",
+    "runtime": "org.kde.Platform",
+    "runtime-version" : "5.11",
+    "sdk": "org.kde.Sdk",
+    "command": "repomaker",
+    "finish-args" : [
+        "--share=ipc",
+        "--socket=x11",
+        "--share=network",
+        "--device=dri",
+        "--socket=wayland",
+        "--filesystem=host"
+    ],
+    "modules": [
+        {
+            "name" : "pyqt5",
+            "config-opts" : [
+                "--disable-static",
+                "--enable-x11"
+            ],
+            "no-autogen" : true,
+            "buildsystem" : "simple",
+            "build-commands" : [
+                "python3 configure.py --assume-shared --confirm-license --no-designer-plugin --no-qml-plugin --sysroot=/app -w --sip=/app/bin/sip --sip-incdir=/app/include -verbose QMAKE_CFLAGS_RELEASE='-I/usr/include/python3.5m/' QMAKE_CXXFLAGS_RELEASE='-I/usr/include/python3.5m/'",
+                "make -j `nproc`",
+                "make install DESTDIR=/app"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.11.3/PyQt5_gpl-5.11.3.tar.gz",
+                    "sha256" : "c9b57d15601d436faf35dacf8e0acefa220194829a653e771e80b189b3261073"
+                }
+            ],
+            "modules" : [
+                {
+                    "name" : "sip",
+                    "sources" : [
+                        {
+                            "type" : "archive",
+                            "url" : "https://sourceforge.net/projects/pyqt/files/sip/sip-4.19.13/sip-4.19.13.tar.gz",
+                            "sha256" : "e353a7056599bf5fbd5d3ff9842a6ab2ea3cf4e0304a0f925ec5862907c0d15e"
+                        }
+                    ],
+                    "buildsystem" : "simple",
+                    "build-commands" : [
+                        "python3 configure.py --bindir=/app/bin --destdir=/app/lib/python3.5/site-packages --incdir=/app/include --pyidir=/app/lib/python3.5/site-packages --sipdir=/app/share/sip",
+                        "make",
+                        "make install"
+                    ],
+                    "cleanup" : [
+                        "/bin",
+                        "/include"
+                    ]
+                }
+            ]
+        },
+        {
+            "name" : "repomaker",
+            "buildsystem" : "simple",
+            "build-options": {
+                "build-args": [
+                    "--share=network"
+                ]
+            },
+            "build-commands" : [
+                "install -Dm644 org.fdroid.Repomaker.png /app/share/icons/hicolor/512x512/apps/org.fdroid.Repomaker.png",
+                "install -Dm644 org.fdroid.Repomaker.desktop /app/share/applications/org.fdroid.Repomaker.desktop",
+                "install -Dm644 org.fdroid.Repomaker.appdata.xml /app/share/metainfo/org.fdroid.Repomaker.appdata.xml",
+                "pip3 install --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} repomaker[gui]"
+            ],
+            "sources" : [
+                {
+                "type" : "file",
+                "path" : "app/share/applications/org.fdroid.Repomaker.desktop"
+                },
+                {
+                "type" : "file",
+                "path" : "app/share/metainfo/org.fdroid.Repomaker.appdata.xml"
+                },
+                {
+                "type" : "file",
+                "path" : "app/share/icons/hicolor/512x512/apps/org.fdroid.Repomaker.png"
+                },
+                {
+                "type" : "git",
+                "url" : "."
+                }
+            ]
+        }
+    ]
+}

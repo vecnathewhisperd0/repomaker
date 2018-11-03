@@ -31,3 +31,10 @@ repomaker-static/
 /dist/
 /repomaker.egg-info/
 /docker/data
+
+.flatpak-builder/
+build-dir/
+repomaker/bin/
+repomaker/include/
+repomaker/lib/
+repomaker/pip-selfcheck.json

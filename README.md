@@ -89,6 +89,28 @@ you can start it like this:
 
 * GNU gettext `apt install gettext`
 
+# Building
+
+## Flatpak
+
+Repomaker is installable with Flatpak.
+To build the package, follow these instructions.
+
+Install `flatpak-builder`.
+
+```bash
+# Add FlatHub to user remotes
+flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+# Install KDE runtimes
+flatpak install --user flathub org.kde.Platform//5.11
+flatpak install --user flathub org.kde.Sdk//5.11
+# Build and install Repomaker for Flatpak
+flatpak-builder --install --force-clean --user build-dir org.fdroid.Repomaker.json
+```
+
+All the Flatpak related stuff is based on
+[pyzo's configurations](https://github.com/flathub/org.pyzo.pyzo).
+
 # License
 
 This program is free software: you can redistribute it and/or modify it
