@@ -14,6 +14,20 @@
     ],
     "modules": [
         {
+            "name": "udev",
+            "config-opts": [
+                "--disable-hwdb", "--disable-logging", "--disable-gudev",
+                "--disable-introspection", "--disable-keymap", "--disable-mtd_probe"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://mirrors.edge.kernel.org/pub/linux/utils/kernel/hotplug/udev-175.tar.bz2",
+                    "sha256": "4c7937fe5a1521316ea571188745b9a00a9fdf314228cffc53a7ba9e5968b7ab"
+                }
+            ]
+        },
+        {
             "name": "PyQt5",
             "cleanup": ["/bin/sip", "/include", "/lib/python3.5/site-packages/*.pyi"],
             "config-opts": ["--disable-static", "--enable-x11"],
