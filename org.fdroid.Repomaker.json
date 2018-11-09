@@ -86,8 +86,9 @@
                 "path" : "app/share/icons/hicolor/512x512/apps/org.fdroid.Repomaker.png"
                 },
                 {
-                "type" : "git",
-                "url" : "."
+                "type" : "archive",
+                "url" : "https://gitlab.com/fdroid/repomaker/-/archive/3c825efdfaa271a6fb8f7487f5c661e7367c00b4/repomaker-3c825efdfaa271a6fb8f7487f5c661e7367c00b4.tar.gz",
+                "sha256": "0e00295454dfdb84693c7748e8d55f22bd7f0b3353eafe0e663407b40d5ca956"
                 }
             ]
         }
