@@ -69,6 +69,7 @@
                 "install -Dm644 org.fdroid.Repomaker.png /app/share/icons/hicolor/512x512/apps/org.fdroid.Repomaker.png",
                 "install -Dm644 org.fdroid.Repomaker.desktop /app/share/applications/org.fdroid.Repomaker.desktop",
                 "install -Dm644 org.fdroid.Repomaker.appdata.xml /app/share/metainfo/org.fdroid.Repomaker.appdata.xml",
+                "pip3 install --prefix=${FLATPAK_DEST} html5lib",
                 "pip3 install --prefix=${FLATPAK_DEST} repomaker[gui]"
             ],
             "sources" : [
