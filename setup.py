@@ -34,7 +34,7 @@ setup(
         'bleach>=2.1.4',
         'python-magic',
         'cryptography>=1.4.0',
-        'fdroidserver==0.8',
+        'fdroidserver==1.0.9',
     ],
 
     # List additional groups of dependencies here (e.g. development dependencies).

@@ -86,18 +86,6 @@ def requirements_check(app_configs, **kwargs):  # pylint: disable=unused-argumen
                      '`apt install apksigner`.',
             )
         )
-    # aapt
-    try:
-        common.SdkToolsPopen(['aapt', 'version'], output=False)
-    except FDroidException:
-        errors.append(
-            Error(
-                'Could not find `aapt` program.',
-                hint='This program can be found in the Android SDK. '
-                     'On Debian-based systems you can also try to run `apt install aapt` '
-                     'to install it.',
-            )
-        )
     # rsync
     if common.find_command('rsync') is None:
         errors.append(
