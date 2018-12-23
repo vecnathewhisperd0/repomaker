@@ -1,5 +1,17 @@
-repomaker (0.0.4) unstable; urgency=low
+repomaker (0.0.4~ubuntu18.04.02) bionic; urgency=medium
 
-  * Initial public release
+  * Add pywebview dependency
 
- -- Torsten Grote <t at grobox.de>  Thu, 21 Sep 2017 12:00:00 +0000
+ -- Jochen Sprickerhof <jspricke@debian.org>  Sun, 23 Dec 2018 21:25:40 +0100
+
+repomaker (0.0.4~ubuntu18.04.01) bionic; urgency=medium
+
+  * Add missing files
+
+ -- Jochen Sprickerhof <jspricke@debian.org>  Sun, 23 Dec 2018 19:49:36 +0100
+
+repomaker (0.0.4~ubuntu18.04) bionic; urgency=medium
+
+  * Initial release. Closes: #nnnn
+
+ -- Jochen Sprickerhof <jspricke@debian.org>  Sun, 23 Dec 2018 19:00:38 +0100
