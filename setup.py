@@ -98,7 +98,7 @@ setup(
             'pywebview[qt5] <3',
         ],
         'test': [
-            'pep8',
+            'pycodestyle',
             'coverage',
             'pylint-django',
         ],
