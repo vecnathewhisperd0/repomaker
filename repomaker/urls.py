@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.views.i18n import javascript_catalog
+from django.views.i18n import JavaScriptCatalog
 from django_js_reverse.views import urls_js
 
 from repomaker.models import S3Storage, SshStorage, GitStorage
@@ -36,7 +36,7 @@ urlpatterns = [
         {'document_root': settings.MEDIA_ROOT}, name='media'),
 
     # JavaScript Internationalisation
-    url(r'^jsi18n/$', javascript_catalog, js_info_dict, name='javascript-catalog'),
+    url(r'^jsi18n/$', JavaScriptCatalog, js_info_dict, name='javascript-catalog'),
 
     # Repo
     url(r'^$', RepositoryListView.as_view(), name='index'),
