@@ -12,10 +12,11 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.files.base import ContentFile
-from django.core.validators import RegexValidator, ValidationError, slug_re, force_text
+from django.core.validators import RegexValidator, ValidationError, slug_re
 from django.db import models
 from django.urls import reverse_lazy
 from django.utils.deconstruct import deconstructible
+from django.utils.encoding import force_str
 from django.utils.translation import ugettext_lazy as _
 from fdroidserver import server
 from libcloud.storage.types import Provider
@@ -125,7 +126,7 @@ class HostnameValidator(RegexValidator):
     message = _('Enter a valid hostname.')
 
     def __call__(self, value):
-        value = force_text(value)
+        value = force_str(value)
         # The maximum length of a full host name is 253 characters per RFC 1034
         # section 3.1. It's defined to be 255 bytes or less, but this includes
         # one byte for the length of the name and one byte for the trailing dot
