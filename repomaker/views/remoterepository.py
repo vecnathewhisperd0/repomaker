@@ -144,7 +144,6 @@ class RemoteAppImportView(RepositoryAuthorizationMixin, LanguageMixin, DetailVie
     def get_queryset(self):
         # restricting query set for security and to add language selector
         remote_repo_id = self.kwargs['remote_repo_id']
-        # XXX removed language filter
         qs = RemoteApp.objects.all()
         return qs.filter(repo__id=remote_repo_id, repo__users__id=self.request.user.id)
 
@@ -162,8 +161,9 @@ class RemoteAppImportView(RepositoryAuthorizationMixin, LanguageMixin, DetailVie
         language
         """
         app = self.get_object()
-        language = self.get_language() or get_language()
-        if language not in app.available_languages:
+        self.activate_language()
+        language = get_language()
+        if language not in app.get_available_languages():
             raise Http404('App is not translated in to the requested language')
         return super(RemoteAppImportView, self).get(request, *args, **kwargs)
 
@@ -172,6 +172,7 @@ class RemoteAppImportView(RepositoryAuthorizationMixin, LanguageMixin, DetailVie
             return Http404()
 
         remote_app = self.get_object()
+        self.activate_language()
         # TODO catch ValidationError and display proper error message on a page
         app = remote_app.add_to_repo(self.get_repo())
 

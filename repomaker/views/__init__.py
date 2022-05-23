@@ -8,12 +8,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.utils import OperationalError
 from django.forms import TextInput, ModelForm
-from django.http import HttpResponseForbidden, HttpResponse, JsonResponse
+from django.http import Http404, HttpResponseForbidden, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils import formats, translation
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
 from django.views.static import serve
+from modeltranslation import settings as modeltranslation_settings
 
 from repomaker import DEFAULT_USER_NAME
 from repomaker.models import RemoteRepository, Repository, RemoteApp
@@ -241,3 +242,11 @@ class LanguageMixin:
         if 'lang' in self.kwargs:
             return self.kwargs['lang']
         return None
+
+    def activate_language(self):
+        language = self.get_language()
+        if language:
+            if language in modeltranslation_settings.AVAILABLE_LANGUAGES:
+                translation.activate(language)
+            else:
+                raise Http404()

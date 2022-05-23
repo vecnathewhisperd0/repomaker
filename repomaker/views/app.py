@@ -55,15 +55,8 @@ class AppDetailView(RepositoryAuthorizationMixin, LanguageMixin, DetailView):
     def get_repo(self):
         return self.get_object().repo
 
-    def get_queryset(self):
-    #     return self.model.objects.language(self.get_language()).fallbacks().all()
-        return self.model.objects.all()
-
     def get_context_data(self, **kwargs):
-        language = self.get_language()
-        if language:
-            translation.activate(language)
-
+        self.activate_language()
         context = super(AppDetailView, self).get_context_data(**kwargs)
         app = context['app']
         context['screenshots'] = Screenshot.objects.filter(app=app, type=PHONE,
@@ -112,11 +105,11 @@ class AppEditView(ApkUploadMixin, LanguageMixin, TemplateResponseMixin, BaseUpda
         return self.get_object().repo
 
     def get_context_data(self, **kwargs):
-        # language = self.get_language()
-        # if language:
-        #     if language not in modeltranslation_settings.AVAILABLE_LANGUAGES:
-        #         raise Http404('Unsupported language')
-        #     # translation.activate(language)
+        app = self.get_object()
+        self.activate_language()
+        language = get_language()
+        if language not in app.get_available_languages():
+            raise Http404()
 
         context = super().get_context_data(**kwargs)
         context['screenshots'] = Screenshot.objects.filter(app=self.get_object(),
@@ -128,27 +121,7 @@ class AppEditView(ApkUploadMixin, LanguageMixin, TemplateResponseMixin, BaseUpda
             self.template_name = 'repomaker/app/edit_blocked.html'
         return context
 
-    def get(self, request, *args, **kwargs):
-        """
-        raise a 404 if the requested app isn't tranlated in to the requested
-        language
-        """
-        app = self.get_object()
-        # TODO: move to LanuageMixin?
-        language = self.get_language()
-        if language:
-            if language not in modeltranslation_settings.AVAILABLE_LANGUAGES:
-                raise Http404('Unsupported language')
-            translation.activate(language)
-        return super(AppEditView, self).get(request, *args, **kwargs)
-
     def post(self, request, *args, **kwargs):
-        language = self.get_language()
-        if language:
-            if language not in modeltranslation_settings.AVAILABLE_LANGUAGES:
-                raise Http404('Unsupported language')
-            translation.activate(language)
-
         if 'apks' in self.request.FILES:
             app = self.get_object()
             added_apks = self.add_apks(app)
