@@ -23,10 +23,6 @@ from repomaker.views.sshstorage import SshStorageCreate, SshStorageUpdate, SshSt
 from repomaker.views.storage import StorageAddView
 from . import views
 
-js_info_dict = {
-    'domain': 'djangojs',
-    'packages': ('repomaker.apps.RepoMakerConfig',),
-}
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -36,7 +32,7 @@ urlpatterns = [
         {'document_root': settings.MEDIA_ROOT}, name='media'),
 
     # JavaScript Internationalisation
-    url(r'^jsi18n/$', JavaScriptCatalog, js_info_dict, name='javascript-catalog'),
+    url(r'^jsi18n/$', JavaScriptCatalog.as_view(packages=['repomaker']), name='javascript-catalog'),
 
     # Repo
     url(r'^$', RepositoryListView.as_view(), name='index'),

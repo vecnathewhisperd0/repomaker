@@ -11,6 +11,7 @@ from django.conf import settings
 from django.core.files import File
 from django.templatetags.static import static
 from django.urls import reverse
+from django.utils import translation
 from fdroidserver.update import METADATA_VERSION
 from repomaker.models import App, RemoteApp, Apk, ApkPointer, RemoteApkPointer, Repository, \
     RemoteRepository, S3Storage, SshStorage, GitStorage
@@ -317,20 +318,21 @@ class RepositoryTestCase(RmTestCase):
 
         # add localized graphic assets
         app.translate('de')
-        app.save()  # needs to be saved for ForeignKey App to be available when saving file
-        app.summary = 'Zusammenfassung'
-        app.description = 'Beschreibung'
-        app.feature_graphic.save('feature-de.png', io.BytesIO(b'foo'), save=False)
-        app.high_res_icon.save('icon.png', io.BytesIO(b'foo'), save=False)
-        app.tv_banner.save('tv.png', io.BytesIO(b'foo'), save=False)
-        app.save()
+        with translation.override('de'):
+            app.summary = 'Zusammenfassung'
+            app.description = 'Beschreibung'
+            app.feature_graphic.save('feature-de.png', io.BytesIO(b'foo'), save=False)
+            app.high_res_icon.save('icon.png', io.BytesIO(b'foo'), save=False)
+            app.tv_banner.save('tv.png', io.BytesIO(b'foo'), save=False)
+            app.save()
 
         # add second translations
         app.translate('en-us')
-        app.summary = 'Test Summary'
-        app.description = 'Test Description'
-        app.save()
-        app.feature_graphic.save('feature-en-us.png', io.BytesIO(b'foo'), save=True)
+        with translation.override('en-us'):
+            app.summary = 'Test Summary'
+            app.description = 'Test Description'
+            app.save()
+            app.feature_graphic.save('feature-en-us.png', io.BytesIO(b'foo'), save=True)
         self.assertTrue(app.feature_graphic.name.endswith('/en-US/feature-en-us.png'))
 
         # assert there's only two available languages
@@ -422,23 +424,24 @@ class RepositoryTestCase(RmTestCase):
         self.assertEqual(apk2, remote_apk_pointer2.apk)
 
         # assert that all localized metadata exists & graphic assets are pointing to right location
-        remote_app = RemoteApp.objects.language('de').get(pk=remote_app.pk)
-        self.assertEqual('Zusammenfassung', remote_app.summary)
-        self.assertEqual('Beschreibung', remote_app.description)
-        url = 'test_url/org.bitbucket.tickytacky.mirrormirror/de/'
-        self.assertEqual(url + 'feature-de.png', remote_app.feature_graphic_url)
-        self.assertEqual(url + 'icon.png', remote_app.high_res_icon_url)
-        self.assertEqual(url + 'tv.png', remote_app.tv_banner_url)
+        remote_app = RemoteApp.objects.get(pk=remote_app.pk)
+        with translation.override('de'):
+            self.assertEqual('Zusammenfassung', remote_app.summary)
+            self.assertEqual('Beschreibung', remote_app.description)
+            url = 'test_url/org.bitbucket.tickytacky.mirrormirror/de/'
+            self.assertEqual(url + 'feature-de.png', remote_app.feature_graphic_url)
+            self.assertEqual(url + 'icon.png', remote_app.high_res_icon_url)
+            self.assertEqual(url + 'tv.png', remote_app.tv_banner_url)
 
         # assert second translation got saved properly
-        remote_app = RemoteApp.objects.language('en-us').get(pk=remote_app.pk)
-        self.assertEqual('Test Summary', remote_app.summary)
-        self.assertEqual('Test Description', remote_app.description)
-        url = 'test_url/org.bitbucket.tickytacky.mirrormirror/en-US/'
-        self.assertEqual(url + 'feature-en-us.png', remote_app.feature_graphic_url)
+        with translation.override('en-us'):
+            self.assertEqual('Test Summary', remote_app.summary)
+            self.assertEqual('Test Description', remote_app.description)
+            url = 'test_url/org.bitbucket.tickytacky.mirrormirror/en-US/'
+            self.assertEqual(url + 'feature-en-us.png', remote_app.feature_graphic_url)
 
         # assert that overrides were moved to default language
-        remote_app = RemoteApp.objects.language(settings.LANGUAGE_CODE).get(pk=remote_app.pk)
+        # no translation.override, use the detfaul language
         self.assertEqual('TestSummary', remote_app.summary)
         self.assertEqual('<p>TestDesc</p>', remote_app.description)
 
@@ -490,14 +493,16 @@ class RepositoryPageTestCase(RmTestCase):
         # add two apps in two different languages
         app1 = App.objects.create(repo=repo, package_id='first', name='TestApp')
         app1.translate('es')
-        app1.summary = 'TestSummary'
-        app1.description = 'TestDesc'
-        app1.save()
+        with translation.override('es'):
+            app1.summary = 'TestSummary'
+            app1.description = 'TestDesc'
+            app1.save()
         app2 = App.objects.create(repo=repo, package_id='second', name='AnotherTestApp')
         app2.translate('de')
-        app2.summary = 'AnotherTestSummary'
-        app2.description = 'AnotherTestDesc'
-        app2.save()
+        with translation.override('de'):
+            app2.summary = 'AnotherTestSummary'
+            app2.description = 'AnotherTestDesc'
+            app2.save()
 
         repo._generate_page()  # pylint: disable=protected-access
         _copy_page_assets.assert_called_once_with()
@@ -511,6 +516,7 @@ class RepositoryPageTestCase(RmTestCase):
         self.assertTrue(os.path.getsize(page_abs_path) > 200)
         with open(page_abs_path, 'r') as repo_page:
             repo_page_string = repo_page.read()
+            # import ipdb; ipdb.set_trace()
             self.assertTrue(app1.name in repo_page_string)
             self.assertTrue(app1.summary in repo_page_string)
             self.assertTrue(app1.description in repo_page_string)

@@ -31,7 +31,48 @@ SECRET_KEY = '913d6#u8@-*#3l)spwzurd#fd77bey-6mfs5fc$a=yhnh!n4p9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-logging.getLogger().setLevel(logging.DEBUG)
+# logging.getLogger().setLevel(logging.DEBUG)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        # '': {
+        #     'handlers': ['console'],
+        #     'level': 'DEBUG'
+        # },
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'repomaker': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        }
+    }
+}
 
 # Add your host here
 ALLOWED_HOSTS = ['127.0.0.1']
@@ -71,7 +112,7 @@ INSTALLED_APPS = [
     'compressor',
     'sass_processor',
     'background_task',
-    'hvad',  # model i18n
+    'modeltranslation',  # model i18n
     'tinymce',
     'django_js_reverse',
     'django.forms',
@@ -196,6 +237,9 @@ MAX_ATTEMPTS = 23  # the number of attempts for marking a task as permanently fa
 
 LANGUAGE_CODE = 'en'
 LANGUAGES = [('en-us', ugettext_lazy('American English'))] + global_settings.LANGUAGES
+
+# defaults to the value of LANGUAGES
+MODELTRANSLATION_LANGUAGES = ('en-us', 'en', 'de-de', 'de', 'fr', 'zh-cn')
 
 TIME_ZONE = 'UTC'
 
