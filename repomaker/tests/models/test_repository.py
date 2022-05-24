@@ -172,7 +172,7 @@ class RepositoryTestCase(RmTestCase):
         # create fake stylesheet for copying
         stylesheet_path = os.path.join(settings.STATIC_ROOT, 'repomaker', 'css', 'repo')
         os.makedirs(stylesheet_path)
-        with open(os.path.join(stylesheet_path, 'page.css'), 'w') as f:
+        with open(os.path.join(stylesheet_path, 'page.css'), 'w', encoding='UTF-8') as f:
             f.write('foo')
 
         # copy page assets to repo
@@ -232,7 +232,7 @@ class RepositoryTestCase(RmTestCase):
         # assert that index has been created properly
         index_path = os.path.join(repo.get_repo_path(), 'index-v1.json')
         self.assertTrue(os.path.isfile(index_path))
-        with open(index_path, 'r') as f:
+        with open(index_path, 'r', encoding='UTF-8') as f:
             index = json.load(f)
 
             # assert that there are no packages and no apps
@@ -514,7 +514,7 @@ class RepositoryPageTestCase(RmTestCase):
         page_abs_path = os.path.join(settings.MEDIA_ROOT, get_repo_file_path(repo, 'index.html'))
         self.assertTrue(os.path.isfile(page_abs_path))
         self.assertTrue(os.path.getsize(page_abs_path) > 200)
-        with open(page_abs_path, 'r') as repo_page:
+        with open(page_abs_path, 'r', encoding='UTF-8') as repo_page:
             repo_page_string = repo_page.read()
             # import ipdb; ipdb.set_trace()
             self.assertTrue(app1.name in repo_page_string)
