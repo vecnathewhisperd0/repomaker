@@ -23,13 +23,13 @@ class RemoteApp(AbstractApp):
     repo = models.ForeignKey(RemoteRepository, on_delete=models.CASCADE)
     icon_etag = models.CharField(max_length=128, blank=True, null=True)
     last_updated_date = models.DateTimeField(blank=True)
-    ## Translated fields
-    feature_graphic_url=models.URLField(blank=True, max_length=2048)
-    feature_graphic_etag=models.CharField(max_length=128, blank=True, null=True)
-    high_res_icon_url=models.URLField(blank=True, max_length=2048)
-    high_res_icon_etag=models.CharField(max_length=128, blank=True, null=True)
-    tv_banner_url=models.URLField(blank=True, max_length=2048)
-    tv_banner_etag=models.CharField(max_length=128, blank=True, null=True)
+    # Translated fields
+    feature_graphic_url = models.URLField(blank=True, max_length=2048)
+    feature_graphic_etag = models.CharField(max_length=128, blank=True, null=True)
+    high_res_icon_url = models.URLField(blank=True, max_length=2048)
+    high_res_icon_etag = models.CharField(max_length=128, blank=True, null=True)
+    tv_banner_url = models.URLField(blank=True, max_length=2048)
+    tv_banner_etag = models.CharField(max_length=128, blank=True, null=True)
 
     def update_from_json(self, app):
         """

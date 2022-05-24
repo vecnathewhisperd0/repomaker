@@ -22,8 +22,6 @@ from repomaker.storage import USER_RE, REMOTE_REPO_RE
 from repomaker.utils import clean
 
 
-logger = logging.getLogger(__name__)
-
 # TODO remove when not needed anymore for testing
 def update(request, repo_id):
     repo = get_object_or_404(Repository, pk=repo_id)

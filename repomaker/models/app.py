@@ -48,10 +48,10 @@ class AbstractApp(models.Model):
     category = models.ManyToManyField(Category, blank=True, limit_choices_to={'user': None})
     added_date = models.DateTimeField(default=timezone.now)
 
-    ## Translated fields
+    # Translated fields
     # for historic reasons summary and description are also included non-localized in the index
-    summary=models.CharField(max_length=255, blank=True)
-    description=models.TextField(blank=True)  # always clean and then consider safe
+    summary = models.CharField(max_length=255, blank=True)
+    description = models.TextField(blank=True)  # always clean and then consider safe
     # hvad kept track of what translations exist, modeltranslation doesn't so we
     # keep track in this field (max_lenght just affects admin display)
     # we keep a comma separated list
@@ -80,7 +80,7 @@ class AbstractApp(models.Model):
         else:
             lang_list = self.available_languages.split(',')
             lang_list.append(language)
-            lang_list = list(set(lang_list)) # remove duplicate values
+            lang_list = list(set(lang_list))  # remove duplicate values
             self.available_languages = ','.join(lang_list)
 
     def default_translate(self):
@@ -141,13 +141,13 @@ class App(AbstractApp):
     tracked_remote = models.ForeignKey('RemoteApp', null=True, default=None,
                                        on_delete=models.SET_NULL)
 
-    ## Translated fields
-    feature_graphic=models.ImageField(blank=True, max_length=1024,
+    # Translated fields
+    feature_graphic = models.ImageField(blank=True, max_length=1024,
+                                        upload_to=get_graphic_asset_file_path)
+    high_res_icon = models.ImageField(blank=True, max_length=1024,
                                       upload_to=get_graphic_asset_file_path)
-    high_res_icon=models.ImageField(blank=True, max_length=1024,
-                                    upload_to=get_graphic_asset_file_path)
-    tv_banner=models.ImageField(blank=True, max_length=1024,
-                                upload_to=get_graphic_asset_file_path)
+    tv_banner = models.ImageField(blank=True, max_length=1024,
+                                  upload_to=get_graphic_asset_file_path)
 
     def get_absolute_url(self):
         kwargs = {'repo_id': self.repo.pk, 'app_id': self.pk}

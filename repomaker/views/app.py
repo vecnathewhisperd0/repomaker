@@ -6,7 +6,6 @@ from django.conf import settings
 from django.db.models import Q
 from django.forms import FileField, ImageField, ClearableFileInput, CharField
 from django.http import Http404, HttpResponseRedirect, HttpResponseServerError, JsonResponse
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils import formats, translation
 from django.utils.translation import ugettext_lazy as _
@@ -230,7 +229,6 @@ class AppTranslationCreateForm(AppForm):
         if lang and lang in modeltranslation_settings.AVAILABLE_LANGUAGES:
             translation.activate(lang)
         return super(AppTranslationCreateForm, self).clean()
-
 
     def clean_lang(self):
         lang = self.cleaned_data['lang'].lower()

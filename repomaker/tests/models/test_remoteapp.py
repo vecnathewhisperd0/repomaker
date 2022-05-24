@@ -150,8 +150,9 @@ class RemoteAppTestCase(RmTestCase):
 
     def test_apply_translation(self):
         # apply new translation
-        new_translation = {'summary': 'test1', 'description': 'test2', 'featureGraphic': 'feature.png',
-                       'icon': 'icon.png', 'tvBanner': 'tv.png'}
+        new_translation = {'summary': 'test1', 'description': 'test2',
+                           'featureGraphic': 'feature.png', 'icon': 'icon.png',
+                           'tvBanner': 'tv.png'}
         self.app.translate('de')
         with translation.override('de'):
             self.app.apply_translation('de', new_translation)
@@ -159,7 +160,8 @@ class RemoteAppTestCase(RmTestCase):
             # assert that translation has been saved
             self.assertEqual(new_translation['summary'], self.app.summary)
             self.assertEqual(new_translation['description'], self.app.description)
-            self.assertEqual('http://repo_url/org.example/de/feature.png', self.app.feature_graphic_url)
+            self.assertEqual('http://repo_url/org.example/de/feature.png',
+                             self.app.feature_graphic_url)
             self.assertEqual('http://repo_url/org.example/de/icon.png', self.app.high_res_icon_url)
             self.assertEqual('http://repo_url/org.example/de/tv.png', self.app.tv_banner_url)
 

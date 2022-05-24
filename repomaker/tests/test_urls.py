@@ -77,7 +77,8 @@ class UrlsTest(RmTestCase):
                 expectation = 200  # adding a new (remote) repo is always possible
             elif 'app' == url.name or 'app_edit' == url.name:
                 # expectation = 404  # apps are bound to repo and return 404 when not found there
-                # XXX unless I'm reading this wrong, it's requesting an app that is in the repo, so it shouldn't 404!?
+                # XXX unless I'm reading this wrong, it's requesting an app that is in the repo,
+                # so it shouldn't 404?
                 expectation = 403
 
             resolved_url = reverse(url.name, kwargs=params)
