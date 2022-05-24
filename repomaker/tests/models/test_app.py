@@ -276,8 +276,8 @@ class AppTestCase(RmTestCase):
         self.app.update_icon(new_icon)
 
         # assert that new icon has been saved properly
-        with open(self.app.icon.path, 'r') as f1:
-            with open(self.remote_app.icon.path, 'r') as f2:
+        with open(self.app.icon.path, 'rb') as f1:
+            with open(self.remote_app.icon.path, 'rb') as f2:
                 self.assertEqual(f1.read(), f2.read())
         self.assertTrue(self.app.icon.name.endswith('test2.png'))
 
