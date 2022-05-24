@@ -111,7 +111,6 @@ class AppTestCase(RmTestCase):
 
         # get localized dict
         localized = {'en-US': {'otherKey': 'test'}}
-        # noinspection PyProtectedMembertest_add_translations_to_localizedtest_add_translations_to_localized
 
         app._add_translations_to_localized(localized)  # pylint: disable=protected-access
 
