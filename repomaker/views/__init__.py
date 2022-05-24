@@ -122,7 +122,8 @@ class AppScrollListView(ListView):
                             version = app_latest_version.version_name
                             date = formats.date_format(app_latest_version.added_date, 'DATE_FORMAT')
                             app_json['updated'] = \
-                                _('Version %(version)s (%(date)s)') % {'version': version, 'date': date}
+                                _('Version %(version)s (%(date)s)') % {'version': version,
+                                                                       'date': date}
 
                         if self.model == RemoteApp:
                             app_json['repo_id'] = app.repo.pk
