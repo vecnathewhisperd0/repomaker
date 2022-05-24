@@ -31,48 +31,7 @@ SECRET_KEY = '913d6#u8@-*#3l)spwzurd#fd77bey-6mfs5fc$a=yhnh!n4p9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-# logging.getLogger().setLevel(logging.DEBUG)
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
-        }
-    },
-    'loggers': {
-        # '': {
-        #     'handlers': ['console'],
-        #     'level': 'DEBUG'
-        # },
-        'django': {
-            'handlers': ['console'],
-            'propagate': True,
-        },
-        'django.request': {
-            'handlers': ['console'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-        'repomaker': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        }
-    }
-}
+logging.getLogger().setLevel(logging.DEBUG)
 
 # Add your host here
 ALLOWED_HOSTS = ['127.0.0.1']
