@@ -151,20 +151,20 @@ class RemoteApp(AbstractApp):
 
     # pylint: disable=attribute-defined-outside-init
     # noinspection PyAttributeOutsideInit
-    def apply_translation(self, original_language_code, translation):
+    def apply_translation(self, original_language_code, new_translation):
         # textual metadata
-        if 'summary' in translation:
-            self.summary = translation['summary']
-        if 'description' in translation:
-            self.description = clean(translation['description'])
+        if 'summary' in new_translation:
+            self.summary = new_translation['summary']
+        if 'description' in new_translation:
+            self.description = clean(new_translation['description'])
         # graphic assets
         url = self._get_base_url(original_language_code)
-        if 'featureGraphic' in translation:
-            self.feature_graphic_url = url + translation['featureGraphic']
-        if 'icon' in translation:
-            self.high_res_icon_url = url + translation['icon']
-        if 'tvBanner' in translation:
-            self.tv_banner_url = url + translation['tvBanner']
+        if 'featureGraphic' in new_translation:
+            self.feature_graphic_url = url + new_translation['featureGraphic']
+        if 'icon' in new_translation:
+            self.high_res_icon_url = url + new_translation['icon']
+        if 'tvBanner' in new_translation:
+            self.tv_banner_url = url + new_translation['tvBanner']
         self.save()
 
     def _update_screenshots(self, localized):
