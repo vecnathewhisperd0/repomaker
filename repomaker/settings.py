@@ -239,6 +239,8 @@ LANGUAGE_CODE = 'en'
 LANGUAGES = [('en-us', ugettext_lazy('American English'))] + global_settings.LANGUAGES
 
 # defaults to the value of LANGUAGES
+# for the unit tests to pass, this list need to include at least:
+# en, en-us, de, and de-de
 MODELTRANSLATION_LANGUAGES = ('en-us', 'en', 'de-de', 'de', 'fr', 'zh-cn')
 
 TIME_ZONE = 'UTC'
