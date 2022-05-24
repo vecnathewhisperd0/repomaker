@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.utils import timezone, translation
 from django.utils.translation import ugettext_lazy as _
 from fdroidserver import metadata, net
-from modeltranslation.utils import fallbacks, get_language
+from modeltranslation.utils import get_language
 
 from repomaker.storage import get_icon_file_path_for_app, \
     get_graphic_asset_file_path
@@ -285,9 +285,9 @@ class App(AbstractApp):
                     graphic, etag = net.http_get(remote_app.tv_banner_url,
                                                  remote_app.tv_banner_etag)
                     if graphic is not None:
-                        app.tv_banner.delete()
+                        self.tv_banner.delete()
                         graphic_name = os.path.basename(remote_app.tv_banner_url)
-                        app.tv_banner.save(graphic_name, BytesIO(graphic), save=False)
+                        self.tv_banner.save(graphic_name, BytesIO(graphic), save=False)
                         remote_app.tv_banner_etag = etag
                 self.save()
                 remote_app.save()
