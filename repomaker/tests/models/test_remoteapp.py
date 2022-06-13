@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils import translation
 
+from repomaker import DEFAULT_USER_NAME
 from repomaker.models import Repository, RemoteRepository, App, RemoteApp, Apk, ApkPointer, \
     RemoteApkPointer, RemoteScreenshot
 from repomaker.models.screenshot import PHONE
@@ -19,13 +20,24 @@ from .. import datetime_is_recent, RmTestCase
 class RemoteAppTestCase(RmTestCase):
     repo = None
     app = None
+    local_repo = None
 
     def setUp(self):
+        if not settings.SINGLE_USER_MODE:
+            self.user = User.objects.create(username=DEFAULT_USER_NAME)
+            self.client.force_login(user=self.user)
+        else:
+            self.user = User.objects.get()
+
         date = datetime.fromtimestamp(1337, timezone.utc)
         self.repo = RemoteRepository.objects.create(name='Test', url='http://repo_url',
                                                     last_change_date=date)
         self.app = RemoteApp.objects.create(repo=self.repo, package_id="org.example",
                                             last_updated_date=date)
+        self.local_repo = Repository.objects.create(name='Test Local',
+                                                    url='http://repo_local',
+                                                    fingerprint="local_fp",
+                                                    user=self.user)
 
     def test_update_from_json_only_when_update(self):
         json = {'name': 'app', 'lastUpdated': 10000}
@@ -87,7 +99,8 @@ class RemoteAppTestCase(RmTestCase):
         self.assertTrue(os.path.isfile(old_icon_path))
 
         # create one local app tracking the remote one
-        App.objects.create(repo_id=1, package_id=self.app.package_id, tracked_remote=self.app)
+        App.objects.create(repo_id=self.local_repo.pk, package_id=self.app.package_id,
+                           tracked_remote=self.app)
 
         # update icon
         http_get.return_value = b'icon-data', 'new_etag'
