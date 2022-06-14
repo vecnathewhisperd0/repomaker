@@ -250,7 +250,7 @@ class RepositoryTestCase(RmTestCase):
             timestamp = datetime.utcfromtimestamp(index['repo']['timestamp'] / 1000)
             self.assertTrue(datetime_is_recent(timestamp))
             self.assertEqual(repo.url, index['repo']['address'])
-            self.assertEqual('default-repo-icon.png', index['repo']['icon'])
+            self.assertEqual('icon.png', index['repo']['icon'])
 
         # assert that repository homepage was re-created
         _generate_page.called_once_with()
@@ -373,7 +373,7 @@ class RepositoryTestCase(RmTestCase):
         # assert repo icon were also downloaded
         self.assertEqual(2, get.call_count)
         get.assert_called_with(  # last get call
-            'test_url' + '/icons/default-repo-icon.png',
+            'test_url' + '/icons/icon.png',
             headers={'User-Agent': 'F-Droid'},
             timeout=600
         )
