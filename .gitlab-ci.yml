@@ -1,3 +1,4 @@
+---
 image: debian:bullseye
 
 stages:
@@ -25,8 +26,8 @@ variables:
   apt-get dist-upgrade
 
 .setup-template: &setup-template
-- *apt-template
-- apt-get install
+  - *apt-template
+  - apt-get install
       curl
       fdroidserver
       git
@@ -97,7 +98,7 @@ Vagrantfile:
   script:
     - *apt-template
     - apt-get update
-    - apt-get install kmod procps ruby vagrant vagrant-libvirt
+    - apt-get install kmod procps ruby vagrant vagrant-libvirt yamllint
     - export EXITVALUE=0
     - function set_error() {
           export EXITVALUE=1;
@@ -105,6 +106,7 @@ Vagrantfile:
       }
     - ruby -c Vagrantfile || set_error
     - vagrant validate || set_error
+    - yamllint .gitlab-ci.yml || set_error
     - exit $EXITVALUE
 
 
@@ -117,7 +119,8 @@ docker:
     IMAGE: registry.gitlab.com/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:latest
 
   before_script:
-    - echo $CI_BUILD_TOKEN | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
+    - echo $CI_BUILD_TOKEN
+        | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
   script:
     - docker build -t $IMAGE .
     - docker push $IMAGE
@@ -126,4 +129,4 @@ docker:
   only:
     - master
   environment:
-      name: docker
+    name: docker
