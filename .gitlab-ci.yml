@@ -87,6 +87,27 @@ units:
   script:
     - ./tests/test-units.sh
 
+
+Vagrantfile:
+  stage: test
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Vagrantfile
+  script:
+    - *apt-template
+    - apt-get update
+    - apt-get install kmod procps ruby vagrant vagrant-libvirt
+    - export EXITVALUE=0
+    - function set_error() {
+          export EXITVALUE=1;
+          printf "\x1b[31mERROR `history|tail -2|head -1|cut -b6-500`\x1b[0m\n";
+      }
+    - ruby -c Vagrantfile || set_error
+    - vagrant validate || set_error
+    - exit $EXITVALUE
+
+
 docker:
   stage: deploy
   image: docker:git
