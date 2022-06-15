@@ -71,7 +71,8 @@ pylint:
   script:
     - ./tests/test-pylint.sh
 
-units:
+
+.units-template: &units-template
   stage: test
   cache:
     paths:
@@ -85,7 +86,16 @@ units:
     - pip3 install -r requirements-dev.txt
     - npm install --user
 
+units:
+  <<: *units-template
   script:
+    - ./tests/test-units.sh
+
+units-bullseye-backports:
+  image: debian:bullseye-backports
+  <<: *units-template
+  script:
+    - apt-get install -t bullseye-backports curl fdroidserver git
     - ./tests/test-units.sh
 
 
