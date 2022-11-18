@@ -20,12 +20,12 @@ echo "REPOMAKER_SECRET_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 
 ## Database
 
 The docker image supports SQLite, MySQL and Postgres databases. You decide which one you gonna use
-by either specifying `REPOMAKER_POSTGRES_DB`, `REPOMAKER_POSTGRES_USER`, `REPOMAKER_POSTGRES_HOST`, and
-`REPOMAKER_POSTGRES_PORT`. If you plan to use MySQL then simply replace POSTGRES with MYSQL so you will
-define env vars `REPOMAKER_MYSQL_DB`, `REPOMAKER_MYSQL_USER`, `REPOMAKER_MYSQL_HOST`, and
-`REPOMAKER_MYSQL_PORT`. The only mandatory one is `REPOMAKER_POSTGRES_DB` or `REPOMAKER_MYSQL_DB`
-in order to use the selected database. If you don't specify any of those, a SQLite database will
-be created in `${REPOMAKER_BASEPATH}/data/db.sqlite3`.
+by either specifying `REPOMAKER_POSTGRES_DB`, `REPOMAKER_POSTGRES_USER`, `REPOMAKER_POSTGRES_USER`,
+`REPOMAKER_POSTGRES_HOST`, and `REPOMAKER_POSTGRES_PORT`. If you plan to use MySQL then simply
+replace POSTGRES with MYSQL so you will define env vars `REPOMAKER_MYSQL_DB`, `REPOMAKER_MYSQL_USER`,
+`REPOMAKER_MYSQL_USER`, `REPOMAKER_MYSQL_HOST`, and `REPOMAKER_MYSQL_PORT`. The only mandatory one
+is `REPOMAKER_POSTGRES_DB` or `REPOMAKER_MYSQL_DB` in order to use the selected database. If you
+don't specify any of those, a SQLite database will be created in `${REPOMAKER_BASEPATH}/data/db.sqlite3`.
 
 - Set up the database authentication, or disable it using [`POSTGRES_HOST_AUTH_METHOD=trust`](https://djangoforprofessionals.com/postgresql/#postgresql) in your docker-compose.yml
 

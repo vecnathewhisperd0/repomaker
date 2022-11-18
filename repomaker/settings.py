@@ -60,6 +60,7 @@ if os.getenv('REPOMAKER_MYSQL_DB') is not None:
         'ENGINE': 'django.db.backends.mysql',
         'NAME': os.getenv('REPOMAKER_MYSQL_DB', 'mysql'),
         'USER': os.getenv('REPOMAKER_MYSQL_USER', 'mysql'),
+        'PASSWORD': os.getenv('REPOMAKER_MYSQL_PASSWORD', 'mysql'),
         'HOST': os.getenv('REPOMAKER_MYSQL_HOST', 'localhost'),
         'PORT': int(os.getenv('REPOMAKER_MYSQL_PORT', '3306')),
     }
@@ -68,6 +69,7 @@ elif os.getenv('REPOMAKER_POSTGRES_DB') is not None:
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('REPOMAKER_POSTGRES_DB', 'postgres'),
         'USER': os.getenv('REPOMAKER_POSTGRES_USER', 'postgres'),
+        'PASSWORD': os.getenv('REPOMAKER_POSTGRES_PASSWORD', 'postgres'),
         'HOST': os.getenv('REPOMAKER_POSTGRES_HOST', 'localhost'),
         'PORT': int(os.getenv('REPOMAKER_POSTGRES_PORT', '5432')),
     }
