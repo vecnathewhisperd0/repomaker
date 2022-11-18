@@ -4,12 +4,12 @@ MAINTAINER team@f-droid.org
 ENV PYTHONUNBUFFERED 1
 ENV DJANGO_SETTINGS_MODULE repomaker.settings_docker
 ENV REPOMAKER_SECRET_KEY "913d6#u8@-*#3l)spwzurd#fd77bey-6mfs5fc$a=yhnh!n4p9"
+ENV DJANGO_SETTINGS_MODULE repomaker.settings
 
 WORKDIR /repomaker
 
 ADD . /repomaker
 
-COPY docker/settings_docker.py ./repomaker/
 COPY docker/apache.conf /etc/apache2/sites-available/repomaker.conf
 COPY docker/wait-for ./
 COPY docker/httpd-foreground ./
@@ -55,6 +55,7 @@ RUN apt-get update && apt-get dist-upgrade && apt-get install \
 		python3-magic \
 		python3-pip \
 		python3-psycopg2 \
+		python3-mysqlclient \
 		python3-qrcode \
 		python3-rcssmin \
 		python3-rjsmin \

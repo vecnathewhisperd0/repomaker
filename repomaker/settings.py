@@ -14,27 +14,32 @@ import os
 from django.conf import global_settings
 from django.utils.translation import ugettext_lazy
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Where user data such as repositories will be stored
-DATA_DIR = os.path.join(BASE_DIR, 'data')
+DATA_DIR = os.getenv('REPOMAKER_DATADIR', os.path.join(BASE_DIR, 'data')) # i would recommend os.path.join(BASE_DIR, '..', 'data')
 
-SINGLE_USER_MODE = True
+SINGLE_USER_MODE = bool(os.getenv('REPOMAKER_MULTIUSER')) # true only when the var is defined and has any non-empty value
+HOSTNAME = os.getenv('REPOMAKER_HOSTNAME', 'localhost')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
 
 # SECURITY WARNING: change this secret key and keep it secret!
 # Changing this in production invalidates all default repo URLs
-SECRET_KEY = '913d6#u8@-*#3l)spwzurd#fd77bey-6mfs5fc$a=yhnh!n4p9'
+SECRET_KEY = os.getenv('REPOMAKER_SECRET_KEY', '913d6#u8@-*#3l)spwzurd#fd77bey-6mfs5fc$a=yhnh!n4p9')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-logging.getLogger().setLevel(logging.DEBUG)
+DEBUG = ('localhost' in HOSTNAME)
+
+if DEBUG:
+    SASS_PROCESSOR_ENABLED = False
+    logging.getLogger().setLevel(logging.DEBUG)
+else:
+    logging.getLogger().setLevel(logging.INFO)
 
 # Add your host here
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = [HOSTNAME, ]
 
 # Location for media accessible via the web-server such as repo icons, screenshots, etc.
 MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
@@ -49,20 +54,34 @@ PRIVATE_REPO_ROOT = os.path.join(DATA_DIR, 'private_repo')
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
-DATABASES = {
-    'default': {
+DATABASES = {}
+if os.getenv('REPOMAKER_MYSQL_DB') is not None:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('REPOMAKER_MYSQL_DB', 'mysql'),
+        'USER': os.getenv('REPOMAKER_MYSQL_USER', 'mysql'),
+        'HOST': os.getenv('REPOMAKER_MYSQL_HOST', 'localhost'),
+        'PORT': int(os.getenv('REPOMAKER_MYSQL_PORT', '3306')),
+    }
+elif os.getenv('REPOMAKER_POSTGRES_DB') is not None:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('REPOMAKER_POSTGRES_DB', 'postgres'),
+        'USER': os.getenv('REPOMAKER_POSTGRES_USER', 'postgres'),
+        'HOST': os.getenv('REPOMAKER_POSTGRES_HOST', 'localhost'),
+        'PORT': int(os.getenv('REPOMAKER_POSTGRES_PORT', '5432')),
+    }
+else:
+    DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(DATA_DIR, 'db.sqlite3'),
     }
-}
 
 
-# Uncomment and edit this, if you want to offer your users storage for their repositories
 # You need to configure your web-server to serve from those locations
-# DEFAULT_REPO_STORAGE = [
-#     (os.path.join(DATA_DIR, 'repos'), '/repos/'),
-#     ('/var/repomaker/repos', 'https://repos.example.org/'),
-# ]
+DEFAULT_REPO_STORAGE = [
+    (os.path.join(DATA_DIR, 'repos'), 'https://%s/repos/' % HOSTNAME),
+]
 
 # Application definition
 
