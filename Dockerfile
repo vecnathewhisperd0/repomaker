@@ -55,7 +55,7 @@ RUN apt-get update && apt-get dist-upgrade && apt-get install \
 		python3-magic \
 		python3-pip \
 		python3-psycopg2 \
-		python3-mysqlclient \
+		python3-mysqldb \
 		python3-qrcode \
 		python3-rcssmin \
 		python3-rjsmin \
