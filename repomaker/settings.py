@@ -17,9 +17,11 @@ from django.utils.translation import ugettext_lazy
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Where user data such as repositories will be stored
-DATA_DIR = os.getenv('REPOMAKER_DATADIR', os.path.join(BASE_DIR, 'data')) # i would recommend os.path.join(BASE_DIR, '..', 'data')
+# I would actully recommend os.path.join(BASE_DIR, '..', 'data')
+DATA_DIR = os.getenv('REPOMAKER_DATADIR', os.path.join(BASE_DIR, 'data'))
 
-SINGLE_USER_MODE = bool(os.getenv('REPOMAKER_MULTIUSER')) # true only when the var is defined and has any non-empty value
+# True only when the var is defined and has any non-empty value
+SINGLE_USER_MODE = bool(os.getenv('REPOMAKER_MULTIUSER'))
 HOSTNAME = os.getenv('REPOMAKER_HOSTNAME', 'localhost')
 
 # Quick-start development settings - unsuitable for production
@@ -108,6 +110,9 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
+AUTHENTICATION_BACKENDS = [
+        'django.contrib.auth.backends.ModelBackend',
+]
 
 if not SINGLE_USER_MODE:
     LOGIN_REDIRECT_URL = "/"
@@ -131,9 +136,8 @@ if not SINGLE_USER_MODE:
         # 'allauth.socialaccount.providers.twitter',
         # 'allauth.socialaccount.providers.weibo',
     ]
-    AUTHENTICATION_BACKENDS = (
-        'django.contrib.auth.backends.ModelBackend',
-        'allauth.account.auth_backends.AuthenticationBackend',
+    AUTHENTICATION_BACKENDS.append(
+        'allauth.account.auth_backends.AuthenticationBackend'
     )
     ACCOUNT_FORMS = {
         'login': 'repomaker.views.RmLoginForm',
