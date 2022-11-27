@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.getenv('REPOMAKER_DATADIR', os.path.join(BASE_DIR, 'data'))
 
 # True only when the var is defined and has any non-empty value
-SINGLE_USER_MODE = bool(os.getenv('REPOMAKER_MULTIUSER'))
+SINGLE_USER_MODE = not bool(os.getenv('REPOMAKER_MULTIUSER'))
 HOSTNAME = os.getenv('REPOMAKER_HOSTNAME', 'localhost')
 
 # Quick-start development settings - unsuitable for production
