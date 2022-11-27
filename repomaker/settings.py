@@ -83,9 +83,10 @@ else:
 
 
 # You need to configure your web-server to serve from those locations
-DEFAULT_REPO_STORAGE = [
-    (os.path.join(DATA_DIR, 'repos'), 'https://%s/repos/' % HOSTNAME),
-]
+if 'localhost' not in HOSTNAME:
+    DEFAULT_REPO_STORAGE = [
+        (os.path.join(DATA_DIR, 'repos'), 'https://%s/repos/' % HOSTNAME),
+    ]
 
 # Application definition
 
