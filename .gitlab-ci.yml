@@ -1,4 +1,5 @@
-image: debian:buster
+---
+image: debian:bullseye
 
 stages:
   - test
@@ -15,18 +16,18 @@ variables:
   set -x
   echo Etc/UTC > /etc/timezone
   echo 'quiet "1";' \
+       'APT::Get::Assume-Yes "true";' \
        'APT::Install-Recommends "0";' \
        'APT::Install-Suggests "0";' \
-       'APT::Acquire::Retries "20";' \
-       'APT::Get::Assume-Yes "true";' \
+       'Acquire::Retries "20";' \
        'Dpkg::Use-Pty "0";' \
       > /etc/apt/apt.conf.d/99gitlab
   apt-get update
   apt-get dist-upgrade
 
 .setup-template: &setup-template
-- *apt-template
-- apt-get install
+  - *apt-template
+  - apt-get install
       curl
       fdroidserver
       git
@@ -34,10 +35,8 @@ variables:
       python3-bleach
       python3-cryptography
       python3-django-allauth
-      python3-django-compat
       python3-django-compressor
-      python3-django-hvad
-      python3-django-js-reverse
+      python3-django-modeltranslation
       python3-django-sass-processor
       python3-dockerpycreds
       python3-libcloud
@@ -55,11 +54,11 @@ variables:
       rsync
 
 
-pep8:
+pycodestyle:
   stage: test
   script:
     - *apt-template
-    - apt-get install pep8
+    - apt-get install pycodestyle
     - ./tests/test-pep8.sh
 
 pylint:
@@ -72,7 +71,8 @@ pylint:
   script:
     - ./tests/test-pylint.sh
 
-units:
+
+.units-template: &units-template
   stage: test
   cache:
     paths:
@@ -86,8 +86,39 @@ units:
     - pip3 install -r requirements-dev.txt
     - npm install --user
 
+units:
+  <<: *units-template
   script:
     - ./tests/test-units.sh
+
+units-bullseye-backports:
+  image: debian:bullseye-backports
+  <<: *units-template
+  script:
+    - apt-get install -t bullseye-backports curl fdroidserver git
+    - ./tests/test-units.sh
+
+
+Vagrantfile:
+  stage: test
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Vagrantfile
+  script:
+    - *apt-template
+    - apt-get update
+    - apt-get install kmod procps ruby vagrant vagrant-libvirt yamllint
+    - export EXITVALUE=0
+    - function set_error() {
+          export EXITVALUE=1;
+          printf "\x1b[31mERROR `history|tail -2|head -1|cut -b6-500`\x1b[0m\n";
+      }
+    - ruby -c Vagrantfile || set_error
+    - vagrant validate || set_error
+    - yamllint .gitlab-ci.yml || set_error
+    - exit $EXITVALUE
+
 
 docker:
   stage: deploy
@@ -96,7 +127,8 @@ docker:
     - docker:dind
 
   before_script:
-    - echo $CI_BUILD_TOKEN | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
+    - echo $CI_BUILD_TOKEN
+        | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
   script:
     - docker build -t $CI_REGISTRY_IMAGE:latest .
     - docker tag $CI_REGISTRY_IMAGE:latest $CI_REGISTRY_IMAGE:buster
@@ -109,4 +141,4 @@ docker:
   only:
     - master
   environment:
-      name: docker
+    name: docker

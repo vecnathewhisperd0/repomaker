@@ -111,9 +111,10 @@ you can start it like this:
 
 ## Vagrant VM
 
-There also a Vagrant setup based on the GitLab CI setup, it is a quick
-way to get a development setup.  First, set up Vagrant on your machine,
-then run:
+There also a Vagrant setup based on the GitLab CI setup, it is a quick way to
+get a development setup.  Using Vagrant's "synced folder" feature, it will
+operate directly on this repo on your host machine.  First, set up Vagrant on
+your machine, then run:
 
 ```console
 $ cd repomaker
@@ -122,7 +123,7 @@ $ vagrant ssh
 vagrant@basebox-buster64:~$ ip a | sed -En 's,.*inet +(192\.168\.[0-9]+\.[0-9]+).*,open http://\1:8000,p'
 open http://192.168.121.37:8000
 vagrant@basebox-buster64:~$ cd $CI_PROJECT_DIR
-vagrant@basebox-buster64:/builds/fdroid/repomaker$ ./tests/test-units.sh
+vagrant@basebox-buster64:/vagrant ./tests/test-units.sh
 ```
 
 
