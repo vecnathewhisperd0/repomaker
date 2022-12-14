@@ -67,6 +67,7 @@ class AppDetailView(RepositoryAuthorizationMixin, LanguageMixin, DetailView):
 class AppForm(TranslationModelForm):
     screenshots = ImageField(required=False, widget=ClearableFileInput(attrs={'multiple': True}))
     apks = FileField(required=False, widget=ClearableFileInput(attrs={'multiple': True}))
+    icon = FileField(required=False, widget=ClearableFileInput())
 
     def __init__(self, *args, **kwargs):
         self.queryset = queryset = App.objects.all()
@@ -83,12 +84,19 @@ class AppForm(TranslationModelForm):
             old_graphic = self.initial['feature_graphic'].path
             if os.path.exists(old_graphic):
                 os.remove(old_graphic)
+        # same for app icon
+        if 'icon' in self.initial and self.initial['icon'].name \
+                and 'icon' in self.changed_data:
+            old_icon = self.initial['icon'].path
+            if os.path.exists(old_icon):
+                os.remove(old_icon)
         return super(AppForm, self).save(commit)
 
     class Meta:
         model = App
         fields = ['summary', 'summary_override', 'description', 'description_override',
-                  'author_name', 'website', 'category', 'screenshots', 'feature_graphic', 'apks']
+                  'author_name', 'website', 'category', 'icon', 'screenshots', 'feature_graphic',
+                  'apks']
         widgets = {'description': MDLTinyMCE(), 'description_override': MDLTinyMCE()}
 
 
@@ -184,6 +192,25 @@ class AppEditView(ApkUploadMixin, LanguageMixin, TemplateResponseMixin, BaseUpda
                     'repo': self.get_repo().id,
                     'app': self.get_object().id,
                     'feature-graphic': self.object.feature_graphic.url
+                }
+                return JsonResponse(json_response, safe=False)
+            # App Icon
+            if request.META['HTTP_RM_BACKGROUND_TYPE'] == 'icon':
+                try:
+                    icon = self.request.FILES.getlist('icon')[0]
+                    self.object = self.get_object()
+                    if self.object.icon and os.path.exists(self.object.icon.path):
+                        os.remove(self.object.icon.path)
+                    self.object.icon = icon
+                    self.object.save()
+                except Exception as e:
+                    logging.error(e)
+                    return HttpResponseServerError(e)
+                self.get_repo().update_async()
+                json_response = {
+                    'repo': self.get_repo().id,
+                    'app': self.get_object().id,
+                    'icon': self.object.icon.url
                 }
                 return JsonResponse(json_response, safe=False)
         return super().post(request, *args, **kwargs)

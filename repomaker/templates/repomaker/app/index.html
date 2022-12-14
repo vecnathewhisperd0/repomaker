@@ -125,6 +125,17 @@
 	</div>
 </div>
 
+{% block app-icon %}
+{% if app.icon %}
+<div class="rm-grid--center mdl-grid">
+	<div class="rm-app-icon mdl-cell mdl-cell--8-col">
+		<h4 class="rm-app-section">{% trans 'Icon' %}</h4>
+		<img src="{{ app.icon.url }}"/>
+	</div>
+</div>
+{% endif %}
+{% endblock app-icon %}
+
 {% block screenshots %}
 {% if form or screenshots.exists %}
 <div class="rm-grid--center mdl-grid">
