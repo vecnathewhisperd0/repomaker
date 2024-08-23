@@ -51,7 +51,7 @@
 {% block categories %}
 <div id="rm-app-categories">
 	{% for category in app.category.all %}
-	<span id="category_{{ category.id }}" class="rm-app-category-chip">
+	<span id="category_{{ category.id }}" class="rm-app-category-chip" {% if category.color %}style="background-color: #{{ category.color }}"{% endif %}>
 		<span class="rm-app-category-text">{{ category.name }}</span>
 		<button type="button" class="mdl-chip__action" onclick="removeCategory({{ category.id }})">
 			<i class="material-icons">clear</i>
@@ -65,7 +65,7 @@
 	<div class="rm-app-category-menu mdl-js-menu mdl-js-ripple-effect" data-mdl-for="rm-app-category-add">
 		<p>{% trans 'Choose Category' %}</p>
 		{% for category in form.category.field.queryset.all %}
-		<button type="button" id="add_category_{{ category.id }}" onclick="addCategory({{ category.id }})">
+		<button type="button" id="add_category_{{ category.id }}" onclick="addCategory({{ category.id }}, '{{ category.color }}')">
 			{{ category.name }}
 		</button>
 		{% endfor %}

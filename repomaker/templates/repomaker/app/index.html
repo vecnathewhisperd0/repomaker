@@ -90,7 +90,7 @@
 			{% block categories %}
 			{% if app.category.exists %}
 			{% for category in app.category.all %}
-			<span class="rm-app-category-chip mdl-chip">
+			<span class="rm-app-category-chip mdl-chip" {% if category.color %}style="background-color: #{{ category.color }}"{% endif %}>
 				<span class="rm-app-category-text mdl-chip__text">{{ category }}</span>
 			</span>
 			{% endfor %}

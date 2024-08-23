@@ -166,6 +166,10 @@ function putAppInformation(jsonHtmlRelation, app, appCard) {
                 var chip = document.createElement('span')
                 chip.classList.add('rm-app-card-category-chip', 'mdl-chip')
 
+                if (categories[i]['color']) {
+                    chip.style.backgroundColor = '#' + categories[i]['color']
+                }
+
                 var chipText = document.createElement('span')
                 chipText.classList.add('rm-app-card-category-text', 'mdl-chip__text')
                 chipText.innerText = categories[i]['name']

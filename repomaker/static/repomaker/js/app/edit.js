@@ -25,7 +25,7 @@ function init() {
     updateCategoryAddButtonLabel();
 }
 
-function addCategory(categoryId) {
+function addCategory(categoryId, categoryColor) {
     for (i = 0; i < categoryFormField.length; i++) {
         // find clicked category in form field
         if (categoryFormField.options[i].value == categoryId) {
@@ -35,17 +35,20 @@ function addCategory(categoryId) {
             // disable category in add menu
             document.getElementById('add_category_' + categoryId).disabled = true;
             // add clicked category to document
-            addChip(categoryId, categoryFormField.options[i].text);
+            addChip(categoryId, categoryFormField.options[i].text, categoryColor);
         }
     }
     updateCategoryAddButtonLabel();
 }
 
-function addChip(categoryId, categoryName) {
+function addChip(categoryId, categoryName, categoryColor) {
     // create chip
     var chip = document.createElement('span');
     chip.id = 'category_' + categoryId;
     chip.className = 'rm-app-category-chip';
+    if (categoryColor) {
+        chip.style.backgroundColor = '#' + categoryColor;
+    }
 
     // add category name to chip
     var chipName = document.createElement('span');
