@@ -90,6 +90,36 @@
 {% endblock description %}
 
 
+{% block app-icon %}
+<div class="rm-grid--center mdl-grid">
+	<div class="rm-app-icon mdl-cell mdl-cell--8-col">
+		<h4 class="rm-app-section">{% trans 'Icon' %}</h4>
+
+		<div id="rm-dnd-holder--icon" class="rm-app-screenshot-drop rm-form">
+			<i class="rm-app-screenshot-drop-icon">file_upload</i>
+			<div class="rm-app-screenshot-drop-title">{% trans 'Add files' %}</div>
+			<div class="rm-app-screenshot-drop-description-first">
+				<span class="rm-dng-text" hidden>{% trans 'Drag and drop an app icon' %}</span>
+			</div>
+			<div class="rm-app-screenshot-drop-description-second">
+				<span class="rm-dng-text" hidden>{% trans 'or' %}</span>
+				<label for="id_icon" class="rm-app-screenshot-drop-upload-browse">{% trans 'browse to upload' %}</label>
+				<input type="file" name="icon" id="id_icon">
+			</div>
+			{{ form.icon.errors }}
+		</div>
+		<div id="rm-dnd-holder--icon--loading" class="rm-app-screenshot-drop--loading" hidden>
+			<div class="rm-dnd-progress mdl-js-progress"></div>
+			<h3 id="rm-dnd-holder--icon--loading-title" class="rm-app-screenshot-drop--loading-title"></h3>
+		</div>
+		{% if app.icon %}
+		<img id="rm-app-icon-img" src="{{ app.icon.url }}"/>
+		{% endif %}
+	</div>
+</div>
+{% endblock app-icon %}
+
+
 {% block screenshot-header %}
 <div class="rm-app-section mdl-cell mdl-cell--8-col">
 	{% trans 'Screenshots' %}

@@ -4,6 +4,7 @@ var holders = [
     document.getElementById('rm-dnd-holder--apks'),
     document.getElementById('rm-dnd-holder-2--apks'),
     document.getElementById('rm-dnd-holder--feature-graphic'),
+    document.getElementById('rm-dnd-holder--icon'),
 ]
 
 function uploadFiles(element, files) {
@@ -115,6 +116,10 @@ function uploadFinished(request, element, type, files) {
         var response = JSON.parse(request.responseText)
         addApks(element, response)
     }
+    else if (type === 'icon' && request.status === 200) {
+        var response = JSON.parse(request.responseText)
+        setAppIcon(element, response)
+    }
     else if (request.status === 204) {
         location.reload()
     }
@@ -198,6 +203,20 @@ function setFeatureGraphic(dndField, response) {
 
     resetDndField(dndField)
     registerDeleteListenerFeatureGraphic()
+}
+
+function setAppIcon(dndField, response) {
+    var appIconContainer = dndField.parentElement
+    var repo = response['repo']
+    var app = response['app']
+    var appIconUrl = response['icon']
+
+    var appIconImg = document.getElementById('rm-app-icon-img')
+    if (appIconImg !== null) {
+        appIconImg.src = appIconUrl
+    }
+
+    resetDndField(dndField)
 }
 
 function addApks(dndField, response) {
