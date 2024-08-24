@@ -2,17 +2,10 @@ FROM debian:bullseye
 MAINTAINER team@f-droid.org
 
 ENV PYTHONUNBUFFERED 1
-ENV DJANGO_SETTINGS_MODULE repomaker.settings_docker
+ENV DJANGO_SETTINGS_MODULE repomaker.settings
 ENV REPOMAKER_SECRET_KEY "913d6#u8@-*#3l)spwzurd#fd77bey-6mfs5fc$a=yhnh!n4p9"
 
 WORKDIR /repomaker
-
-ADD . /repomaker
-
-COPY docker/settings_docker.py ./repomaker/
-COPY docker/apache.conf /etc/apache2/sites-available/repomaker.conf
-COPY docker/wait-for ./
-COPY docker/httpd-foreground ./
 
 # Debian setup
 ENV LANG=C.UTF-8 \
@@ -55,6 +48,7 @@ RUN apt-get update && apt-get dist-upgrade && apt-get install \
 		python3-magic \
 		python3-pip \
 		python3-psycopg2 \
+		python3-mysqldb \
 		python3-qrcode \
 		python3-rcssmin \
 		python3-rjsmin \
@@ -66,14 +60,22 @@ RUN apt-get update && apt-get dist-upgrade && apt-get install \
 		s3cmd && \
 	apt-get autoremove --purge && \
 	apt-get clean && \
-	rm -rf /var/lib/apt/lists/* && \
-	cat docker/ssh_config >> /etc/ssh/ssh_config && \
+	rm -rf /var/lib/apt/lists/*
+
+COPY docker/apache.conf /etc/apache2/sites-available/repomaker.conf
+COPY requirements.txt ./
+COPY package.json ./
+COPY docker ./docker
+COPY debian ./debian
+
+RUN cat docker/ssh_config >> /etc/ssh/ssh_config && \
 	a2dissite 000-default && \
 	a2ensite repomaker && \
 	pip3 install -r requirements.txt && \
-	npm install && \
-	./pre-release.sh
+	npm install 
 
+COPY . /repomaker
+RUN ./pre-release.sh
 
 RUN find /repomaker/ -perm -o=w  -exec chmod go-w {} \;
 RUN chmod 644 /etc/apache2/sites-available/repomaker.conf
