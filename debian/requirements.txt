@@ -1,3 +1,5 @@
 # These requirements are not yet in Debian
-django-background-tasks==1.1.13
-django-tinymce >=2.6.0, <3
+#django-background-tasks==1.1.13
+django-background-tasks@git+https://github.com/django-background-tasks/django-background-tasks.git@master
+#django-tinymce >=2.6.0, <3
+django-tinymce==4.1.0
