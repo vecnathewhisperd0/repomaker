@@ -13,7 +13,7 @@ from django.db import models
 from django.db.models.signals import post_delete, pre_delete
 from django.dispatch import receiver
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from repomaker import tasks
 from repomaker.models.repository import AbstractRepository

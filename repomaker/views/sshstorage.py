@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.forms import BooleanField
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from repomaker.models import SshStorage
 
 from .storage import StorageForm, MainStorageMixin, StorageCreateView, StorageDetailView, \

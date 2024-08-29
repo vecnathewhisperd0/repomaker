@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.forms import Textarea
 from django.http import HttpResponseServerError, HttpResponse, Http404
 from django.shortcuts import get_object_or_404
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 

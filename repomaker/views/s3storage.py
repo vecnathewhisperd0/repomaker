@@ -1,5 +1,5 @@
 from django.forms import PasswordInput
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from repomaker.models import S3Storage
 from .storage import StorageForm, StorageCreateView, StorageDetailView, StorageUpdateView, \

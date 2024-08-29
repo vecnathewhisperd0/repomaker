@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import override_settings
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from fdroidserver.exception import BuildException
 
 from repomaker.models import App, Apk, ApkPointer, Repository

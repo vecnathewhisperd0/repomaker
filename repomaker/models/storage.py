@@ -18,7 +18,7 @@ from django.db import models
 from django.urls import reverse_lazy
 from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from libcloud.storage.types import Provider
 
 from repomaker.storage import get_identity_file_path, PrivateStorage, REPO_DIR

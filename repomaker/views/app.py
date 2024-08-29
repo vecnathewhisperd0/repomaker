@@ -8,7 +8,7 @@ from django.forms import FileField, ImageField, ClearableFileInput, CharField
 from django.http import Http404, HttpResponseRedirect, HttpResponseServerError, JsonResponse
 from django.urls import reverse_lazy
 from django.utils import formats, translation
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.utils.translation.trans_real import language_code_re
 from django.views.generic import DetailView
 from django.views.generic.base import TemplateResponseMixin
@@ -39,7 +39,8 @@ class MDLTinyMCE(TinyMCE):
         return mce_config
 
     def _media(self):
-        # we include this manually, so we can decide what gets compressed and what not
+        # we include this manually, so we can decide what gets compressed and
+        # what not
         return ()
 
     media = property(_media)
@@ -58,15 +59,22 @@ class AppDetailView(RepositoryAuthorizationMixin, LanguageMixin, DetailView):
         self.activate_language()
         context = super(AppDetailView, self).get_context_data(**kwargs)
         app = context['app']
-        context['screenshots'] = Screenshot.objects.filter(app=app, type=PHONE,
-                                                           language_code=self.get_language())
-        context['apks'] = ApkPointer.objects.filter(app=app).order_by('-apk__version_code')
+        context['screenshots'] = Screenshot.objects.filter(
+            app=app, type=PHONE, language_code=self.get_language())
+        context['apks'] = ApkPointer.objects.filter(
+            app=app).order_by('-apk__version_code')
         return context
 
 
 class AppForm(TranslationModelForm):
-    screenshots = ImageField(required=False, widget=ClearableFileInput(attrs={'multiple': True}))
-    apks = FileField(required=False, widget=ClearableFileInput(attrs={'multiple': True}))
+    screenshots = ImageField(widget=ClearableFileInput(
+        attrs={
+            "allow_multiple_selected": True}),
+        required=False)
+    apks = FileField(widget=ClearableFileInput(
+        attrs={
+            "allow_multiple_selected": True}),
+        required=False)
 
     def __init__(self, *args, **kwargs):
         self.queryset = queryset = App.objects.all()
@@ -87,12 +95,27 @@ class AppForm(TranslationModelForm):
 
     class Meta:
         model = App
-        fields = ['summary', 'summary_override', 'description', 'description_override',
-                  'author_name', 'website', 'category', 'screenshots', 'feature_graphic', 'apks']
-        widgets = {'description': MDLTinyMCE(), 'description_override': MDLTinyMCE()}
+        fields = [
+            'summary',
+            'summary_override',
+            'description',
+            'description_override',
+            'author_name',
+            'website',
+            'category',
+            'screenshots',
+            'feature_graphic',
+            'apks']
+        widgets = {
+            'description': MDLTinyMCE(),
+            'description_override': MDLTinyMCE()}
 
 
-class AppEditView(ApkUploadMixin, LanguageMixin, TemplateResponseMixin, BaseUpdateView):
+class AppEditView(
+        ApkUploadMixin,
+        LanguageMixin,
+        TemplateResponseMixin,
+        BaseUpdateView):
     model = App
     object = None
     pk_url_kwarg = 'app_id'
@@ -111,10 +134,10 @@ class AppEditView(ApkUploadMixin, LanguageMixin, TemplateResponseMixin, BaseUpda
             raise Http404()
 
         context = super().get_context_data(**kwargs)
-        context['screenshots'] = Screenshot.objects.filter(app=self.get_object(),
-                                                           type=PHONE,
-                                                           language_code=self.get_language())
-        context['apks'] = ApkPointer.objects.filter(app=self.object).order_by('-apk__version_code')
+        context['screenshots'] = Screenshot.objects.filter(
+            app=self.get_object(), type=PHONE, language_code=self.get_language())
+        context['apks'] = ApkPointer.objects.filter(
+            app=self.object).order_by('-apk__version_code')
         if self.get_object().tracked_remote:
             # do not allow edits as long as a remote app is tracked
             self.template_name = 'repomaker/app/edit_blocked.html'
@@ -126,25 +149,30 @@ class AppEditView(ApkUploadMixin, LanguageMixin, TemplateResponseMixin, BaseUpda
             added_apks = self.add_apks(app)
             if len(added_apks['failed']) > 0:
                 if self.request.is_ajax():
-                    return HttpResponseServerError(self.get_error_msg(added_apks['failed']))
+                    return HttpResponseServerError(
+                        self.get_error_msg(added_apks['failed']))
                 self.object = app
                 form = self.get_form()
-                form.add_error('apks', self.get_error_msg(added_apks['failed']))
+                form.add_error(
+                    'apks', self.get_error_msg(
+                        added_apks['failed']))
                 return self.form_invalid(form)
             if self.request.is_ajax():
                 apk_objects = added_apks['apks']
                 apks = []
                 for apk in apk_objects:
                     apk_dict = {
-                        'id': ApkPointer.objects.get(app=app, apk=apk).id,
+                        'id': ApkPointer.objects.get(
+                            app=app,
+                            apk=apk).id,
                         'version': _('Version %(version)s (%(code)s)') % {
                             'version': apk.version_name,
-                            'code': apk.version_code
-                        },
+                            'code': apk.version_code},
                         'released': _('Released %(date)s') % {
-                            'date': formats.date_format(apk.added_date, 'DATE_FORMAT'),
-                        }
-                    }
+                            'date': formats.date_format(
+                                apk.added_date,
+                                'DATE_FORMAT'),
+                        }}
                     apks.append(apk_dict)
                 json_response = {
                     'repo': self.get_repo().id,
@@ -207,8 +235,10 @@ class AppEditView(ApkUploadMixin, LanguageMixin, TemplateResponseMixin, BaseUpda
         """
         screenshots = []
         for screenshot in self.request.FILES.getlist('screenshots'):
-            screenshot = Screenshot.objects.create(app=self.get_object(), file=screenshot,
-                                                   language_code=self.get_language())
+            screenshot = Screenshot.objects.create(
+                app=self.get_object(),
+                file=screenshot,
+                language_code=self.get_language())
             screenshot = {
                 'id': screenshot.id,
                 'url': screenshot.file.url
@@ -221,8 +251,11 @@ class AppTranslationCreateForm(AppForm):
 
     def __init__(self, *args, **kwargs):
         super(AppTranslationCreateForm, self).__init__(*args, **kwargs)
-        self.fields['lang'] = CharField(required=True, min_length=2,
-                                        widget=DataListTextInput(settings.LANGUAGES))
+        self.fields['lang'] = CharField(
+            required=True,
+            min_length=2,
+            widget=DataListTextInput(
+                settings.LANGUAGES))
 
     def clean(self):
         lang = self.data.get('lang')
@@ -235,7 +268,8 @@ class AppTranslationCreateForm(AppForm):
         if not re.match(language_code_re, lang):
             self._errors['lang'] = _('This is not a valid language code.')
         if lang in self.instance.get_available_languages():
-            self._errors['lang'] = _('This language already exists. Please choose another one!')
+            self._errors['lang'] = _(
+                'This language already exists. Please choose another one!')
         return lang
 
     def save(self, commit=True):
@@ -262,7 +296,13 @@ class AppTranslationCreateView(AppEditView):
         post_lang = request.POST.get('lang')
         if post_lang and post_lang.lower() in modeltranslation_settings.AVAILABLE_LANGUAGES:
             translation.activate(post_lang)
-        return super(AppTranslationCreateView, self).post(request, *args, **kwargs)
+        return super(
+            AppTranslationCreateView,
+            self).post(
+            request,
+            *
+            args,
+            **kwargs)
 
 
 class AppDeleteView(RepositoryAuthorizationMixin, DeleteView):

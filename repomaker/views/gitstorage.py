@@ -2,7 +2,7 @@ import fdroidserver.index
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.forms import CharField, URLField, TextInput
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from repomaker.models.storage import GitStorage, HostnameValidator, PathValidator
 
 from .sshstorage import SshStorageForm, SshKeyMixin

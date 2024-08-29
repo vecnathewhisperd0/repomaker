@@ -8,7 +8,7 @@ from django.dispatch import receiver
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils import timezone, translation
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from fdroidserver import metadata, net
 from modeltranslation.utils import get_language
 

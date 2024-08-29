@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.forms import Select
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import DeleteView
 
 from repomaker.models import Screenshot
