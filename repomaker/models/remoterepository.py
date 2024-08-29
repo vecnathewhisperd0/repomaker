@@ -131,6 +131,8 @@ class RemoteRepository(AbstractRepository):
                 query_set = RemoteApp.objects.filter(repo=self, package_id=app['packageName'])
 
             # update existing app or create a new one
+            #  disables 'query_set' before assignment (possibly-used-before-assignment)
+            # pylint: disable=E0606
             if self.pk and query_set.exists():
                 remote_app = query_set.get()
             else:
