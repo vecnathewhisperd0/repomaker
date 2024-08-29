@@ -148,7 +148,7 @@ class AppEditView(
             app = self.get_object()
             added_apks = self.add_apks(app)
             if len(added_apks['failed']) > 0:
-                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
                     return HttpResponseServerError(
                         self.get_error_msg(added_apks['failed']))
                 self.object = app
@@ -157,7 +157,7 @@ class AppEditView(
                     'apks', self.get_error_msg(
                         added_apks['failed']))
                 return self.form_invalid(form)
-            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 apk_objects = added_apks['apks']
                 apks = []
                 for apk in apk_objects:
