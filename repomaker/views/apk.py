@@ -9,7 +9,11 @@ from .repository import RepositoryAuthorizationMixin, ApkUploadMixin
 
 
 class ApkForm(BaseModelForm):
-    apks = FileField(required=False, widget=ClearableFileInput(attrs={'multiple': True}))
+    apks = FileField(
+        widget=ClearableFileInput(
+            attrs={
+                "allow_multiple_selected": True}),
+        required=False)
 
     class Meta:
         model = Apk
