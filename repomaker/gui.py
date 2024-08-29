@@ -28,7 +28,7 @@ def create_window():
     global terminate  # pylint: disable=global-statement
     try:
         webview.config["USE_QT"] = True  # use Qt instead of Gtk for webview
-        webview.create_window("Repomaker", confirm_close=True)
+        webview.create_window("Repomaker", confirm_quit=True)
         terminate = True
     finally:
         # halt background tasks
