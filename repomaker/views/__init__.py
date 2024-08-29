@@ -106,7 +106,7 @@ class AppScrollListView(ListView):
     object_list = None
 
     def get(self, request, *args, **kwargs):
-        if request.is_ajax():
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             self.object_list = self.get_queryset()
             apps = self.get_context_data(**kwargs)['apps']
             apps_json = []
