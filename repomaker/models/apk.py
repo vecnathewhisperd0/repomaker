@@ -16,7 +16,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from repomaker import tasks
-from repomaker.models.repository import AbstractRepository
+from repomaker.models.repository import DerivedRepository
 from repomaker.storage import get_apk_file_path, RepoStorage
 from .apkpointer import ApkPointer, RemoteApkPointer
 from .app import IMAGE, VIDEO, AUDIO, DOCUMENT, BOOK, APK
@@ -141,7 +141,7 @@ class Apk(models.Model):
 
         :return: A dict of APK information or None
         """
-        AbstractRepository().get_config()
+        DerivedRepository().get_config()
 
         # Verify that the signature is correct
         if not fdroidserver.verify_apk_signature(self.file.path):

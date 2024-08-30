@@ -87,6 +87,13 @@ class AbstractRepository(models.Model):
         return config
 
 
+class DerivedRepository(AbstractRepository):
+    """
+    Derived class for AbstractRepository that can be 
+    instanciated at will
+    """
+
+
 class Repository(AbstractRepository):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     qrcode = models.ImageField(upload_to=get_repo_file_path, blank=True)
