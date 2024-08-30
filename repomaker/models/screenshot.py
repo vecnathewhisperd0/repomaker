@@ -42,7 +42,7 @@ class AbstractScreenshot(models.Model):
         abstract = True
 
 
-#pylint: disable=W0223
+# pylint: disable=W0223
 class DerivedAbstractScreenshot(AbstractScreenshot):
     """
     Devived class to do the dirty work of AbstractScrrenshot
@@ -51,8 +51,10 @@ class DerivedAbstractScreenshot(AbstractScreenshot):
 
 class Screenshot(AbstractScreenshot):
     app = models.ForeignKey(App, on_delete=models.CASCADE)
-    file = models.ImageField(upload_to=get_screenshot_file_path, storage=RepoStorage(),
-                             max_length=1024)
+    file = models.ImageField(
+        upload_to=get_screenshot_file_path,
+        storage=RepoStorage(),
+        max_length=1024)
     # TODO add a thumbnail to be automatically generated from file
 
     def __str__(self):
@@ -71,7 +73,8 @@ class RemoteScreenshot(AbstractScreenshot):
     url = models.URLField(max_length=2048)
 
     def __str__(self):
-        return super(RemoteScreenshot, self).__str__() + " " + os.path.basename(self.url)
+        return super(RemoteScreenshot, self).__str__() + \
+            " " + os.path.basename(self.url)
 
     def get_url(self):
         return self.url
@@ -85,10 +88,13 @@ class RemoteScreenshot(AbstractScreenshot):
             return
         for file in files:
             url = base_url + file
-            if not RemoteScreenshot.objects.filter(language_code=language_code, type=s_type,
-                                                   app=app, url=url).exists():
-                screenshot = RemoteScreenshot(language_code=language_code, type=s_type, app=app,
-                                              url=url)
+            if not RemoteScreenshot.objects.filter(
+                    language_code=language_code,
+                    type=s_type,
+                    app=app,
+                    url=url).exists():
+                screenshot = RemoteScreenshot(
+                    language_code=language_code, type=s_type, app=app, url=url)
                 screenshot.save()
 
     def download_async(self, app):
@@ -102,10 +108,16 @@ class RemoteScreenshot(AbstractScreenshot):
         Does a blocking download of this RemoteScreenshot
         and creates a local Screenshot if successful.
         """
-        screenshot = Screenshot(language_code=self.language_code, type=self.type, app_id=app_id)
+        screenshot = Screenshot(
+            language_code=self.language_code,
+            type=self.type,
+            app_id=app_id)
         r = requests.get(self.url, timeout=60)
         if r.status_code == requests.codes.ok:
-            screenshot.file.save(os.path.basename(self.url), BytesIO(r.content), save=True)
+            screenshot.file.save(
+                os.path.basename(
+                    self.url), BytesIO(
+                    r.content), save=True)
 
 
 def is_supported_type(s_type):
