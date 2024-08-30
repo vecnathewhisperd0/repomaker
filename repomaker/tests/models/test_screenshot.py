@@ -26,8 +26,12 @@ class ScreenshotTestCase(RmTestCase):
 
     def setUp(self):
         super().setUp()
-        self.app = App.objects.create(repo=self.repo, name='TestApp', package_id='org.example')
-        self.screenshot = Screenshot.objects.create(app=self.app, language_code='en-us')
+        self.app = App.objects.create(
+            repo=self.repo,
+            name='TestApp',
+            package_id='org.example')
+        self.screenshot = Screenshot.objects.create(
+            app=self.app, language_code='en-us')
 
     def test_str(self):
         self.assertTrue(self.app.name in str(self.screenshot))
@@ -35,7 +39,9 @@ class ScreenshotTestCase(RmTestCase):
         self.assertTrue(self.screenshot.language_code in str(self.screenshot))
 
     def test_get_relative_path(self):
-        self.assertEqual('org.example/en-US/phoneScreenshots', self.screenshot.get_relative_path())
+        self.assertEqual(
+            'org.example/en-US/phoneScreenshots',
+            self.screenshot.get_relative_path())
 
     def test_file(self):
         self.screenshot.file.save('test.png', io.BytesIO(b'foo'))
@@ -43,8 +49,9 @@ class ScreenshotTestCase(RmTestCase):
 
     def test_get_url(self):
         self.test_file()  # needs to save a file first, because getting URL that includes file
-        self.assertEqual('/media/user_1/repo_1/repo/org.example/en-US/phoneScreenshots/test.png',
-                         self.screenshot.get_url())
+        self.assertEqual(
+            '/media/user_1/repo_1/repo/org.example/en-US/phoneScreenshots/test.png',
+            self.screenshot.get_url())
 
     def test_types(self):
         Screenshot.objects.create(app=self.app, type=PHONE)
@@ -74,10 +81,13 @@ class RemoteScreenshotTestCase(TestCase):
         # remote objects
         self.remote_repo = RemoteRepository.objects.get(pk=1)
         date = datetime.fromtimestamp(1337, timezone.utc)
-        self.remote_app = RemoteApp.objects.create(repo=self.remote_repo, name='TestApp',
-                                                   package_id='org.example', last_updated_date=date)
-        self.remote_screenshot = RemoteScreenshot.objects.create(app=self.remote_app,
-                                                                 url='test_url/test.png')
+        self.remote_app = RemoteApp.objects.create(
+            repo=self.remote_repo,
+            name='TestApp',
+            package_id='org.example',
+            last_updated_date=date)
+        self.remote_screenshot = RemoteScreenshot.objects.create(
+            app=self.remote_app, url='test_url/test.png')
 
         # local objects
         self.user = User.objects.create(username='user2')
@@ -90,8 +100,12 @@ class RemoteScreenshotTestCase(TestCase):
 
     def test_str(self):
         self.assertTrue(self.remote_app.name in str(self.remote_screenshot))
-        self.assertTrue(self.remote_screenshot.type in str(self.remote_screenshot))
-        self.assertTrue(self.remote_screenshot.language_code in str(self.remote_screenshot))
+        self.assertTrue(
+            self.remote_screenshot.type in str(
+                self.remote_screenshot))
+        self.assertTrue(
+            self.remote_screenshot.language_code in str(
+                self.remote_screenshot))
         self.assertTrue('test.png' in str(self.remote_screenshot))
 
     def test_get_url(self):
@@ -99,11 +113,12 @@ class RemoteScreenshotTestCase(TestCase):
 
     def test_add(self):
         # add to remote screenshots from RemoteApp
-        RemoteScreenshot.add('en', PHONE, self.remote_app, 'base_url/', ['test1.png', 'test2.png'])
+        RemoteScreenshot.add('en', PHONE, self.remote_app,
+                             'base_url/', ['test1.png', 'test2.png'])
 
         # assert both screenshots have been added properly
         remote_screenshots = RemoteScreenshot.objects.all()
-        self.assertEqual(1+2, len(remote_screenshots))
+        self.assertEqual(1 + 2, len(remote_screenshots))
         for screenshot in remote_screenshots:
             if screenshot == self.remote_screenshot:
                 continue
@@ -115,7 +130,12 @@ class RemoteScreenshotTestCase(TestCase):
 
     def test_add_with_unsupported_type(self):
         # add RemoteScreenshot with unsupported type
-        RemoteScreenshot.add('en', 'unsupported', self.remote_app, 'base_url/', ['test1.png'])
+        RemoteScreenshot.add(
+            'en',
+            'unsupported',
+            self.remote_app,
+            'base_url/',
+            ['test1.png'])
 
         # assert that no more RemoteScreenshots have been created
         self.assertEqual(1, RemoteScreenshot.objects.all().count())
@@ -124,7 +144,8 @@ class RemoteScreenshotTestCase(TestCase):
     def test_download_async(self, download_remote_screenshot):
         # schedule async download
         self.remote_screenshot.download_async(self.app)
-        download_remote_screenshot.assert_called_once_with(self.remote_screenshot.pk, self.app.pk)
+        download_remote_screenshot.assert_called_once_with(
+            self.remote_screenshot.pk, self.app.pk)
 
     @patch('requests.get')
     def test_download(self, get):
@@ -141,8 +162,14 @@ class RemoteScreenshotTestCase(TestCase):
         screenshot = Screenshot.objects.get(pk=1)
         self.assertEqual(self.app, screenshot.app)
         self.assertEqual(self.remote_screenshot.type, screenshot.type)
-        self.assertEqual(self.remote_screenshot.language_code, screenshot.language_code)
-        self.assertEqual(get_screenshot_file_path(screenshot, 'test.png'), screenshot.file.name)
+        self.assertEqual(
+            self.remote_screenshot.language_code,
+            screenshot.language_code)
+        self.assertEqual(
+            get_screenshot_file_path(
+                screenshot,
+                'test.png'),
+            screenshot.file.name)
         os.path.isfile(screenshot.file.path)
 
     @patch('requests.get')
