@@ -42,6 +42,7 @@ class AbstractScreenshot(models.Model):
         abstract = True
 
 
+#pylint: disable=W0223
 class DerivedAbstractScreenshot(AbstractScreenshot):
     """
     Devived class to do the dirty work of AbstractScrrenshot

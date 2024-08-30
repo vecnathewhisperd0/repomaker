@@ -88,6 +88,7 @@ class AbstractRepository(models.Model):
         return config
 
 
+#pylint: disable=W0223
 class DerivedRepository(AbstractRepository):
     """
     Derived class for AbstractRepository that can be
