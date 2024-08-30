@@ -42,6 +42,12 @@ class AbstractScreenshot(models.Model):
         abstract = True
 
 
+class DerivedAbstractScreenshot(AbstractScreenshot):
+    """
+    Devived class to do the dirty work of AbstractScrrenshot
+    """
+
+
 class Screenshot(AbstractScreenshot):
     app = models.ForeignKey(App, on_delete=models.CASCADE)
     file = models.ImageField(upload_to=get_screenshot_file_path, storage=RepoStorage(),
