@@ -33,7 +33,6 @@ RUN echo Etc/UTC > /etc/timezone \
 RUN apt-get update && apt-get dist-upgrade && apt-get install \
 		apache2 \
 		apksigner \
-		fdroidserver \
 		gettext \
 		git \
 		gnupg \
@@ -63,6 +62,8 @@ RUN apt-get update && apt-get dist-upgrade && apt-get install \
 		python3-webview \
 		python3-wheel \
 		rsync \
+		rclone \
+		openjdk-11-jdk \
 		s3cmd && \
 	apt-get autoremove --purge && \
 	apt-get clean && \
@@ -70,7 +71,7 @@ RUN apt-get update && apt-get dist-upgrade && apt-get install \
 	cat docker/ssh_config >> /etc/ssh/ssh_config && \
 	a2dissite 000-default && \
 	a2ensite repomaker && \
-	pip3 install -r requirements.txt && \
+	pip3 install -r requirements-dev.txt && \
 	npm install && \
 	./pre-release.sh
 

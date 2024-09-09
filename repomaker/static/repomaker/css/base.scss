@@ -108,7 +108,7 @@ body {
 }
 
 .rm-button--red-border:hover {
-    @extend .rm-button:hover;
+    @extend .rm-button, :hover;
 }
 
 .rm-toolbar-account {

@@ -1,6 +1,14 @@
+django >=2.0, <3.0
+#Django >=2.0, <3.0
+#Django >=1.8
 pycodestyle
 coverage
 pylint
 pylint-django
 lxml
 cssselect
+fdroidserver@git+https://gitlab.com/fdroid/fdroidserver.git@master
+django-background-tasks
+django-tinymce
+django-js-reverse
+androguard==3.3.5

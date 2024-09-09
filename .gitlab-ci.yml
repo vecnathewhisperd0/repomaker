@@ -28,7 +28,6 @@ variables:
 - *apt-template
 - apt-get install
       curl
-      fdroidserver
       git
       python3-babel
       python3-bleach
@@ -51,7 +50,14 @@ variables:
       python3-webview
       python3-wheel
       rsync
-
+      rclone
+      apksigner
+      default-jre-headless
+      openjdk-11-jdk
+      s3cmd
+#- pip3 install git+https://gitlab.com/pmmayero/fdroidserver.git@switching-s3cmd-for-rclone
+- pip3 install fdroidserver@git+https://gitlab.com/fdroid/fdroidserver.git@master
+- pip3 install androguard==3.3.5
 
 pycodestyle:
   stage: test
@@ -103,8 +109,9 @@ docker:
     - docker push $CI_REGISTRY_IMAGE:bullseye
     - docker push $CI_REGISTRY_IMAGE:django-2
 
-  when: on_success
+  #when: on_success
+  allow_failure: true
   only:
-    - master
+    - Repomaker-rclone-support
   environment:
       name: docker

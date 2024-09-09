@@ -4,7 +4,10 @@ from django.contrib import admin
 from django.views.i18n import JavaScriptCatalog
 from django_js_reverse.views import urls_js
 
-from repomaker.models import S3Storage, SshStorage, GitStorage
+from repomaker.models.storage import S3Storage, SshStorage, GitStorage
+from repomaker.models.backblaze import B2Storage
+from repomaker.models.filebase import FilebaseStorage
+from repomaker.models.rclonesupportedstorage import RcloneStorage
 from repomaker.views import media_serve
 from repomaker.views.apk import ApkUploadView, ApkPointerDeleteView
 from repomaker.views.app import AppDetailView, AppDeleteView, AppEditView, \
@@ -17,6 +20,12 @@ from repomaker.views.repository import RepositoryCreateView, RepositoryView, Rep
     RepositoryDeleteView, RepositoryListView
 from repomaker.views.s3storage import S3StorageCreate, S3StorageDetail, S3StorageUpdate, \
     S3StorageDelete
+from repomaker.views.b2storage import B2StorageCreate, B2StorageDetail, B2StorageUpdate, \
+    B2StorageDelete
+from repomaker.views.filebasestorage import FilebaseStorageCreate, FilebaseStorageDetail, \
+    FilebaseStorageUpdate, FilebaseStorageDelete
+from repomaker.views.rclonesupportedstorage import RcloneStorageCreate, RcloneStorageDetail, \
+    RcloneStorageUpdate, RcloneStorageDelete
 from repomaker.views.screenshot import ScreenshotDeleteView
 from repomaker.views.sshstorage import SshStorageCreate, SshStorageUpdate, SshStorageDetail, \
     SshStorageDelete
@@ -104,6 +113,36 @@ urlpatterns = [
         S3StorageUpdate.as_view(), name=S3Storage.edit_url_name),
     url(r'^(?P<repo_id>[0-9]+)/storage/s3/(?P<pk>[0-9]+)/delete/$',
         S3StorageDelete.as_view(), name=S3Storage.delete_url_name),
+
+    # B2 Storage
+    url(r'^(?P<repo_id>[0-9]+)/storage/b2/add/$',
+        B2StorageCreate.as_view(), name=B2Storage.add_url_name),
+    url(r'^(?P<repo_id>[0-9]+)/storage/b2/(?P<pk>[0-9]+)/$',
+        B2StorageDetail.as_view(), name=B2Storage.detail_url_name),
+    url(r'^(?P<repo_id>[0-9]+)/storage/b2/(?P<pk>[0-9]+)/edit/$',
+        B2StorageUpdate.as_view(), name=B2Storage.edit_url_name),
+    url(r'^(?P<repo_id>[0-9]+)/storage/b2/(?P<pk>[0-9]+)/delete/$',
+        B2StorageDelete.as_view(), name=B2Storage.delete_url_name),
+
+    # Filebase Storage
+    url(r'^(?P<repo_id>[0-9]+)/storage/filebase/add/$',
+        FilebaseStorageCreate.as_view(), name=FilebaseStorage.add_url_name),
+    url(r'^(?P<repo_id>[0-9]+)/storage/filebase/(?P<pk>[0-9]+)/$',
+        FilebaseStorageDetail.as_view(), name=FilebaseStorage.detail_url_name),
+    url(r'^(?P<repo_id>[0-9]+)/storage/filebase/(?P<pk>[0-9]+)/edit/$',
+        FilebaseStorageUpdate.as_view(), name=FilebaseStorage.edit_url_name),
+    url(r'^(?P<repo_id>[0-9]+)/storage/filebase/(?P<pk>[0-9]+)/delete/$',
+        FilebaseStorageDelete.as_view(), name=FilebaseStorage.delete_url_name),
+
+    # Rclone Supported Storage
+    url(r'^(?P<repo_id>[0-9]+)/storage/rclone/add/$',
+        RcloneStorageCreate.as_view(), name=RcloneStorage.add_url_name),
+    url(r'^(?P<repo_id>[0-9]+)/storage/rclone/(?P<pk>[0-9]+)/$',
+        RcloneStorageDetail.as_view(), name=RcloneStorage.detail_url_name),
+    url(r'^(?P<repo_id>[0-9]+)/storage/rclone/(?P<pk>[0-9]+)/edit/$',
+        RcloneStorageUpdate.as_view(), name=RcloneStorage.edit_url_name),
+    url(r'^(?P<repo_id>[0-9]+)/storage/rclone/(?P<pk>[0-9]+)/delete/$',
+        RcloneStorageDelete.as_view(), name=RcloneStorage.delete_url_name),
 
     # SSH Storage
     url(r'^(?P<repo_id>[0-9]+)/storage/ssh/add/$',

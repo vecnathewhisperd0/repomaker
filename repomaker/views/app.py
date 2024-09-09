@@ -25,6 +25,38 @@ from . import DataListTextInput, LanguageMixin
 from .repository import RepositoryAuthorizationMixin, ApkUploadMixin
 
 
+class MultipleFileInput(ClearableFileInput):
+    allow_multiple_selected = True
+
+
+class MultipleFileField(FileField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("widget", MultipleFileInput())
+        super().__init__(*args, **kwargs)
+
+    def clean(self, data, initial=None):
+        single_file_clean = super().clean
+        if isinstance(data, (list, tuple)):
+            result = [single_file_clean(d, initial) for d in data]
+        else:
+            result = single_file_clean(data, initial)
+        return result
+
+
+class MultipleImageField(ImageField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("widget", MultipleFileInput())
+        super().__init__(*args, **kwargs)
+
+    def clean(self, data, initial=None):
+        single_file_clean = super().clean
+        if isinstance(data, (list, tuple)):
+            result = [single_file_clean(d, initial) for d in data]
+        else:
+            result = single_file_clean(data, initial)
+        return result
+
+
 class MDLTinyMCE(TinyMCE):
     """
     Ugly hack to work around a conflict between MDL and TinyMCE. See #31 for more details.
@@ -65,8 +97,10 @@ class AppDetailView(RepositoryAuthorizationMixin, LanguageMixin, DetailView):
 
 
 class AppForm(TranslationModelForm):
-    screenshots = ImageField(required=False, widget=ClearableFileInput(attrs={'multiple': True}))
-    apks = FileField(required=False, widget=ClearableFileInput(attrs={'multiple': True}))
+    # screenshots = ImageField(required=False, widget=ClearableFileInput(attrs={'multiple': True}))
+    # apks = FileField(required=False, widget=ClearableFileInput(attrs={'multiple': True}))
+    screenshots = MultipleImageField(required=False)
+    apks = MultipleFileField(required=False)
 
     def __init__(self, *args, **kwargs):
         self.queryset = queryset = App.objects.all()
