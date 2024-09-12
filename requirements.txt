@@ -3,7 +3,7 @@ apache-libcloud>=2.0.0
 bleach>=2.1.4, <5.0
 cryptography>=1.4.0
 #django >=2.0, <3.0
-django==4.2.15
+django==4.2.16
 #django-background-tasks@git+https://github.com/django-background-tasks/django-background-tasks.git@master
 django-background-tasks==1.2.8
 django-allauth
