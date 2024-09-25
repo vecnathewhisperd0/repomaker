@@ -1,9 +1,9 @@
 -r debian/requirements.txt
 apache-libcloud>=2.0.0
+androguard==3.3.5
 bleach>=2.1.4, <5.0
 cryptography>=1.4.0
 django >=2.0, <3.0
-#Django==1.8
 django-allauth
 django-compressor
 django-modeltranslation >=0.15
