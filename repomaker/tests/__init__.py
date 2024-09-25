@@ -34,11 +34,9 @@ def fake_repo_create(repo):
             os.makedirs(icon_dir)
 
     #  create tmp folder
-    repo_path = os.path.join(repo.get_repo_path())
-    from pathlib import Path
-    r_path = Path(repo_path)
-    index_v2_tmp = r_path.parent / 'tmp'
-    index_v2_tmp.mkdir()
+    tmp_dir = os.path.dirname(os.path.join(repo.get_repo_path())) + "/tmp"
+    if not os.path.exists(tmp_dir):
+        os.makedirs(tmp_dir)
 
 
 class RmTestCase(TestCase):
