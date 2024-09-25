@@ -44,7 +44,7 @@ class RcloneStorage(AbstractStorage):
         self.config_file.save(
             'id_%d' %
             self.pk +
-            '_.conf',
+            '.conf',
             ContentFile(
                 self.rclone_config_text_field))
 
