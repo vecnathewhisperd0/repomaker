@@ -55,9 +55,6 @@ variables:
       default-jre-headless
       openjdk-11-jdk
       s3cmd
-#- pip3 install git+https://gitlab.com/pmmayero/fdroidserver.git@switching-s3cmd-for-rclone
-- pip3 install fdroidserver@git+https://gitlab.com/fdroid/fdroidserver.git@master
-- pip3 install androguard==3.3.5
 
 pycodestyle:
   stage: test
