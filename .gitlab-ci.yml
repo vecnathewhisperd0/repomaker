@@ -106,9 +106,9 @@ docker:
     - docker push $CI_REGISTRY_IMAGE:bullseye
     - docker push $CI_REGISTRY_IMAGE:django-2
 
-  #when: on_success
+  when: on_success
   allow_failure: true
   only:
-    - Repomaker-rclone-support
+    - master
   environment:
       name: docker
