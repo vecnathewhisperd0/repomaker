@@ -71,7 +71,7 @@ RUN apt-get update && apt-get dist-upgrade && apt-get install \
 	cat docker/ssh_config >> /etc/ssh/ssh_config && \
 	a2dissite 000-default && \
 	a2ensite repomaker && \
-	pip3 install -r requirements-dev.txt && \
+	pip3 install -r requirements.txt && \
 	npm install && \
 	./pre-release.sh
 
