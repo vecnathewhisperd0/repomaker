@@ -97,8 +97,6 @@ class AppDetailView(RepositoryAuthorizationMixin, LanguageMixin, DetailView):
 
 
 class AppForm(TranslationModelForm):
-    # screenshots = ImageField(required=False, widget=ClearableFileInput(attrs={'multiple': True}))
-    # apks = FileField(required=False, widget=ClearableFileInput(attrs={'multiple': True}))
     screenshots = MultipleImageField(required=False)
     apks = MultipleFileField(required=False)
 
