@@ -405,7 +405,4 @@ class DefaultStorage:
             os.makedirs(remote)
         mirror = dict()
         mirror['url'] = remote
-        logging.warning(print('mirror is ', mirror))
-        logging.warning(print("the remote is ", remote))
-        logging.warning(print("the local is ", local))
         fdroidserver.update_serverwebroot(mirror, local)
