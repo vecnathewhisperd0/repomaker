@@ -3,8 +3,8 @@ from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.urls import reverse_lazy
 from django.views.generic.edit import UpdateView, DeleteView
 
-from multiplefileupload import MultipleFileField, MultipleFileInput, MultipleImageField
 from repomaker.models import Apk, ApkPointer
+from repomaker.views.multiplefileupload import MultipleFileField, MultipleFileInput, MultipleImageField
 from . import BaseModelForm
 from .repository import RepositoryAuthorizationMixin, ApkUploadMixin
 
