@@ -5,8 +5,6 @@ pylint
 pylint-django
 lxml
 cssselect
-fdroidserver@git+https://gitlab.com/fdroid/fdroidserver.git@master
 django-background-tasks
 django-tinymce
 django-js-reverse
-androguard==3.3.5
