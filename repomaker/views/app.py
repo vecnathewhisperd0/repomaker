@@ -18,43 +18,12 @@ from modeltranslation import settings as modeltranslation_settings
 from modeltranslation.utils import get_language
 from tinymce.widgets import TinyMCE
 
+from multiplefileupload import MultipleFileField, MultipleFileInput, MultipleImageField
 from repomaker.models import App, ApkPointer, Screenshot
 from repomaker.models.category import Category
 from repomaker.models.screenshot import PHONE
 from . import DataListTextInput, LanguageMixin
 from .repository import RepositoryAuthorizationMixin, ApkUploadMixin
-
-
-class MultipleFileInput(ClearableFileInput):
-    allow_multiple_selected = True
-
-
-class MultipleFileField(FileField):
-    def __init__(self, *args, **kwargs):
-        kwargs.setdefault("widget", MultipleFileInput())
-        super().__init__(*args, **kwargs)
-
-    def clean(self, data, initial=None):
-        single_file_clean = super().clean
-        if isinstance(data, (list, tuple)):
-            result = [single_file_clean(d, initial) for d in data]
-        else:
-            result = single_file_clean(data, initial)
-        return result
-
-
-class MultipleImageField(ImageField):
-    def __init__(self, *args, **kwargs):
-        kwargs.setdefault("widget", MultipleFileInput())
-        super().__init__(*args, **kwargs)
-
-    def clean(self, data, initial=None):
-        single_file_clean = super().clean
-        if isinstance(data, (list, tuple)):
-            result = [single_file_clean(d, initial) for d in data]
-        else:
-            result = single_file_clean(data, initial)
-        return result
 
 
 class MDLTinyMCE(TinyMCE):
