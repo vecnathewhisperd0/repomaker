@@ -1,7 +1,7 @@
-{% extends "repomaker/storage/detail.html" %}
+{% extends "repomaker/storage/detail_b2_config.html" %}
 {% load i18n %}
 
-{% block help_text %}
+{% block ssh_help_text %}
 <p>
 	{% blocktrans trimmed %}
 	Please follow the instructions at 
@@ -10,7 +10,7 @@
     To access content, please ensure that your bucket is public.
 	{% endblocktrans %}
 </p>
-{% endblock help_text %}
+{% endblock ssh_help_text %}
 
 {% block storage_details %}
 <li class="rm-storage-detail-info-item-container">
