@@ -1,6 +1,6 @@
 """
 This custom module implements multifile upload in Django
-More information can be found at 
+More information can be found at
 https://docs.djangoproject.com/en/5.1/topics/http/file-uploads/#uploading-multiple-files
 """
 from django.forms import FileField, ClearableFileInput, ImageField
