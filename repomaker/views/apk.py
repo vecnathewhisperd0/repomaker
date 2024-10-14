@@ -1,10 +1,9 @@
-from django.forms import FileField, ClearableFileInput, ImageField
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.urls import reverse_lazy
 from django.views.generic.edit import UpdateView, DeleteView
 
 from repomaker.models import Apk, ApkPointer
-from repomaker.views.multiplefileupload import MultipleFileField, MultipleFileInput, MultipleImageField
+from repomaker.views.multiplefileupload import MultipleFileField
 from . import BaseModelForm
 from .repository import RepositoryAuthorizationMixin, ApkUploadMixin
 

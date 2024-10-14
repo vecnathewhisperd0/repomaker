@@ -4,7 +4,7 @@ import re
 import os
 from django.conf import settings
 from django.db.models import Q
-from django.forms import FileField, ImageField, ClearableFileInput, CharField
+from django.forms import CharField
 from django.http import Http404, HttpResponseRedirect, HttpResponseServerError, JsonResponse
 from django.urls import reverse_lazy
 from django.utils import formats, translation
@@ -21,7 +21,7 @@ from tinymce.widgets import TinyMCE
 from repomaker.models import App, ApkPointer, Screenshot
 from repomaker.models.category import Category
 from repomaker.models.screenshot import PHONE
-from repomaker.views.multiplefileupload import MultipleFileField, MultipleFileInput, MultipleImageField
+from repomaker.views.multiplefileupload import MultipleFileField, MultipleImageField
 from . import DataListTextInput, LanguageMixin
 from .repository import RepositoryAuthorizationMixin, ApkUploadMixin
 
