@@ -18,7 +18,7 @@ from modeltranslation import settings as modeltranslation_settings
 from modeltranslation.utils import get_language
 from tinymce.widgets import TinyMCE
 
-from multiplefileupload import MultipleFileField, MultipleFileInput, MultipleImageField
+from .multiplefileupload import MultipleFileField, MultipleFileInput, MultipleImageField
 from repomaker.models import App, ApkPointer, Screenshot
 from repomaker.models.category import Category
 from repomaker.models.screenshot import PHONE

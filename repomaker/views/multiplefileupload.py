@@ -5,6 +5,7 @@ https://docs.djangoproject.com/en/5.1/topics/http/file-uploads/#uploading-multip
 """
 from django.forms import FileField, ClearableFileInput, ImageField
 
+
 class MultipleFileInput(ClearableFileInput):
     allow_multiple_selected = True
 
