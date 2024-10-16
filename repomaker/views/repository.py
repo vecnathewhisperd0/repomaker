@@ -64,7 +64,7 @@ class ApkUploadMixin(RepositoryAuthorizationMixin):
                 logging.warning(e)
                 if apk.pk:
                     apk.delete()
-                if isinstance(e, collections.Iterable):
+                if isinstance(e, collections.abc.Iterable):
                     tup = (apk_file, ' '.join(e))
                 else:
                     tup = (apk_file, str(e))
