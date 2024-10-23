@@ -403,6 +403,4 @@ class DefaultStorage:
         remote = os.path.join(self.path, self.get_identifier())
         if not os.path.exists(remote):
             os.makedirs(remote)
-        mirror = dict()
-        mirror['url'] = remote
-        fdroidserver.update_serverwebroot(mirror, local)
+        fdroidserver.update_serverwebroot({'url': remote}, local)

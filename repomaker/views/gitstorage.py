@@ -69,8 +69,7 @@ class GitUrlValidationMixin(SshKeyMixin):
 
         # try to generate the F-Droid repo URL from the git repo URL
         # convert form.cleaned_data['ssh_url'] to dictionary
-        mirror = {}
-        mirror['url'] = form.cleaned_data['ssh_url']
+        mirror = {'url': form.cleaned_data['ssh_url']}
         mirror_urls = fdroidserver.index.get_mirror_service_urls(mirror)
         if len(mirror_urls) > 0:
             form.instance.url = mirror_urls[0]

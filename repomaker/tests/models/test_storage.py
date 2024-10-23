@@ -187,6 +187,4 @@ class DefaultStorageTestCase(TestCase):
         storage.publish()
         local = self.repo.get_repo_path()
         remote = os.path.join(settings.DEFAULT_REPO_STORAGE[0][0], storage.get_identifier())
-        mirror = dict()
-        mirror['url'] = remote
-        update_serverwebroot.assert_called_once_with(mirror, local)
+        update_serverwebroot.assert_called_once_with({'url': remote}, local)
