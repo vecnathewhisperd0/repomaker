@@ -247,7 +247,7 @@ class RepositoryTestCase(RmTestCase):
             self.assertEqual(repo.description, index['repo']['description'])
 
             # TODO do we expect/want a specific timestamp?
-            timestamp = datetime.utcfromtimestamp(index['repo']['timestamp'] / 1000)
+            timestamp = datetime.fromtimestamp((index['repo']['timestamp'] / 1000), timezone.utc)
             self.assertTrue(datetime_is_recent(timestamp))
             self.assertEqual(repo.url, index['repo']['address'])
             self.assertEqual('icon.png', index['repo']['icon'])
@@ -266,7 +266,7 @@ class RepositoryTestCase(RmTestCase):
             self.assertEqual(repo.description, index['repo']['description']['en-US'])
 
             # TODO do we expect/want a specific timestamp?
-            timestamp = datetime.utcfromtimestamp(index['repo']['timestamp'] / 1000)
+            timestamp = datetime.fromtimestamp((index['repo']['timestamp'] / 1000), timezone.utc)
             self.assertTrue(datetime_is_recent(timestamp))
             self.assertEqual(repo.url, index['repo']['address'])
             self.assertEqual('/icons/icon.png', index['repo']['icon']['en-US']['name'])
