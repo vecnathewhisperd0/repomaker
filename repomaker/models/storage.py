@@ -234,10 +234,9 @@ class AbstractSshStorage(AbstractStorage):
         logging.info("Publishing '%s' to %s", self.repo, self)
         config = self.repo.get_config()
         if self.identity_file is not None and self.identity_file != '':
-            path = os.path.join(
+            config['identity_file'] = os.path.join(
                 settings.PRIVATE_REPO_ROOT,
                 self.identity_file.name)
-            config['identity_file'] = path
 
     class Meta:
         abstract = True
