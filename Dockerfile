@@ -27,6 +27,7 @@ RUN echo Etc/UTC > /etc/timezone \
 
 # a version of the Debian package list is also in .gitlab-ci.yml
 RUN apt-get update && apt-get dist-upgrade && apt-get install \
+                apt-utils \
                 apache2 \
                 apksigner \
                 fdroidserver \
