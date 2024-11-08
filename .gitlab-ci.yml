@@ -28,7 +28,6 @@ variables:
 - *apt-template
 - apt-get install
       curl
-      fdroidserver
       git
       python3-babel
       python3-bleach
@@ -51,6 +50,8 @@ variables:
       python3-webview
       python3-wheel
       rsync
+      openjdk-17-jdk
+      s3cmd
 
 
 pycodestyle:
@@ -106,6 +107,6 @@ docker:
 
   when: on_success
   only:
-    - solve-tests-not-passing
+    - master
   environment:
       name: docker
