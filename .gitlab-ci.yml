@@ -107,6 +107,6 @@ docker:
 
   when: on_success
   only:
-    - solve-tests-not-passing
+    - master
   environment:
       name: docker
