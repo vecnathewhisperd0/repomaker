@@ -27,6 +27,7 @@ variables:
 .setup-template: &setup-template
 - *apt-template
 - apt-get install
+      apksigner
       curl
       git
       python3-babel
