@@ -1,0 +1,79 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "repomaker"
+dynamic = ["version"]
+description = "Create F-Droid repositories with ease"
+readme = "README.md"
+license = "AGPL-3.0"
+requires-python = ">=3"
+authors = [
+    { name = "F-Droid Community", email = "team@f-droid.org" },
+]
+keywords = [
+    "android",
+    "app",
+    "repository",
+    "store",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Programming Language :: Python :: 3.4",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Topic :: System :: Software Distribution",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "bleach >=2.1.4, <5.0",
+    "cryptography>=1.4.0",
+    "django >=2.0, <3.0",
+    "django-allauth",
+    "django-background-tasks >=1.1.13, <1.2",
+    "django-compressor",
+    "django-js-reverse>=0.9.0",
+    "django-modeltranslation <0.17",
+    "django-sass-processor",
+    "django-tinymce >=2.6.0, <3",
+    "fdroidserver>=2.0",
+    "html5lib >= 1.1, <1.2",
+    "python-magic",
+    "qrcode",
+]
+
+[project.optional-dependencies]
+gui = [
+    "PyQt5==5.10.0",
+    "pywebview[qt5] <3",
+]
+test = [
+    "coverage",
+    "pycodestyle",
+    "pylint-django",
+]
+
+[project.scripts]
+repomaker-server = "repomaker:runserver"
+repomaker-tasks = "repomaker:process_tasks"
+
+[project.gui-scripts]
+repomaker = "repomaker.gui:main"
+
+[project.urls]
+Homepage = "https://f-droid.org/repomaker/"
+
+[tool.hatch.version]
+path = "repomaker/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/repomaker",
+]
