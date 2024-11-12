@@ -77,7 +77,7 @@ setup(
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
         'django >=2.0, <3.0',
-        'django-allauth',
+        'django-allauth==0.54',
         'django-tinymce >=2.6.0, <3',
         'django-js-reverse>=0.9.0',
         'django-compressor',
@@ -89,15 +89,16 @@ setup(
         'python-magic',
         'qrcode',
         'cryptography>=1.4.0',
-        'fdroidserver>=2.0',
+        'fdroidserver==2.1.2',
     ],
     # List additional groups of dependencies here (e.g. development dependencies).
     # You can install these using the following syntax, for example:
     # $ pip install -e .[dev,test]
     extras_require={
         'gui': [
+            'PyQtWebEngine',
             'PyQt5==5.10.0',
-            'pywebview[qt5] <3',
+            'pywebview==2.4',
         ],
         'test': [
             'pycodestyle',
