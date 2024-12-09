@@ -9,8 +9,7 @@ django-compressor
 django-modeltranslation >=0.15
 django-js-reverse >=0.9.0
 django-sass-processor
-#fdroidserver >=2.0
-fdroidserver@git+https://gitlab.com/fdroid/fdroidserver.git@master
+fdroidserver
 html5lib >= 1.1, <1.2
 libsass
 python-magic
