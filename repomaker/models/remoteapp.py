@@ -216,7 +216,8 @@ class RemoteApp(AbstractApp):
         from .app import App
         from .screenshot import RemoteScreenshot
         if self.is_in_repo(repo):
-            raise ValidationError(_("This app does already exist in your repository."))
+            raise ValidationError(_("This app does already exist in your repository. %(app_name)"),
+                                  params={"app_name": self.name})
 
         # add only latest APK
         remote_pointer = self.get_latest_apk_pointer()
