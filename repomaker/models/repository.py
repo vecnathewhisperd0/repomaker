@@ -92,7 +92,7 @@ class AbstractRepository(models.Model):
 class DerivedRepository(AbstractRepository):
     """
     Derived class for AbstractRepository that can be
-    instanciated at will
+    instantiated at will
     """
 
 
