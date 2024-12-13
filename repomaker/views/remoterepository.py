@@ -120,7 +120,9 @@ class AppRemoteAddView(RepositoryAuthorizationMixin, AppScrollListView):
             for app in apps_to_add:
                 app_id = app['appId']
                 remote_repo_id = app['appRepoId']
-                remote_app = RemoteApp.objects.get(repo__id=remote_repo_id, pk=app_id, repo__users__id=request.user.id)
+                remote_app = RemoteApp.objects.get(repo__id=remote_repo_id,
+                                                   pk=app_id,
+                                                   repo__users__id=request.user.id)
                 try:
                     remote_app.add_to_repo(self.get_repo())
                 except OperationalError as e:
