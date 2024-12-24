@@ -88,7 +88,7 @@
 			<p class="rm-storage-s3-description">
 				{% blocktrans trimmed %}
 				Amazon S3 is a web service offered by Amazon Web Services.
-				Amazon S3 provides storages through web service interfaces.
+				Amazon S3 provides storage through web service interfaces.
 				Pricing varies.
 				Visit the Amazon S3 website for details.
 				{% endblocktrans %}
@@ -99,6 +99,62 @@
 				</a>
 			</div>
 		</div>
+
+		<div class="rm-storage-s3">
+			<h4 class="rm-storage-s3-title">{% trans 'Backblaze B2' %}</h4>
+			<div class="rm-storage-s3-subtitle">{% trans 'Requires a Backblaze Account' %}</div>
+			<p class="rm-storage-s3-description">
+				{% blocktrans trimmed %}
+				Backblaze B2 is a web service offered by Backblaze.
+				It provides storage through web service interfaces.
+				Pricing varies and can be an awesome alternative to AWS S3.
+				Visit the Backblaze website for details.
+				{% endblocktrans %}
+			</p>
+			<div class="rm-storage-action">
+				<a href="{% url 'storage_b2_add' repo.id %}" class="rm-storage-setup">
+					<button>{% trans 'Setup' %}</button>
+				</a>
+			</div>
+		</div>
+
+        <div class="rm-storage-s3">
+			<h4 class="rm-storage-s3-title">{% trans 'Filebase' %}</h4>
+			<div class="rm-storage-s3-subtitle">{% trans 'Requires a Filebase Account' %}</div>
+			<p class="rm-storage-s3-description">
+				{% blocktrans trimmed %}
+				IPFS Made Easy.
+				
+                Pinning data to IPFS can be hard. 
+
+				Filebase removes that complexity.
+
+				Visit the Filebase website for details.
+				{% endblocktrans %}
+			</p>
+			<div class="rm-storage-action">
+				<a href="{% url 'storage_filebase_add' repo.id %}" class="rm-storage-setup">
+					<button>{% trans 'Setup' %}</button>
+				</a>
+			</div>
+		</div>
+
+		<div class="rm-storage-s3">
+			<h4 class="rm-storage-s3-title">{% trans 'Any Rclone S3 Supported service' %}</h4>
+			<div class="rm-storage-s3-subtitle">{% trans 'Requires an account with any Rclone S3 supported service' %}</div>
+			<p class="rm-storage-s3-description">
+				{% blocktrans trimmed %}
+				Rclone is a command-line program to manage files on cloud storage. 
+				It is a feature-rich alternative to cloud vendors' web storage interfaces.
+				{% endblocktrans %}
+			</p>
+			<div class="rm-storage-action">
+				<a href="{% url 'storage_rclone_add' repo.id %}" class="rm-storage-setup">
+					<button>{% trans 'Setup' %}</button>
+				</a>
+			</div>
+		</div>
+
 	</div>
 </div>
 {% endblock rm-content %}

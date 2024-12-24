@@ -4,7 +4,7 @@ import re
 import os
 from django.conf import settings
 from django.db.models import Q
-from django.forms import FileField, ImageField, ClearableFileInput, CharField
+from django.forms import CharField
 from django.http import Http404, HttpResponseRedirect, HttpResponseServerError, JsonResponse
 from django.urls import reverse_lazy
 from django.utils import formats, translation
@@ -21,6 +21,7 @@ from tinymce.widgets import TinyMCE
 from repomaker.models import App, ApkPointer, Screenshot
 from repomaker.models.category import Category
 from repomaker.models.screenshot import PHONE
+from repomaker.views.multiplefileupload import MultipleFileField, MultipleImageField
 from . import DataListTextInput, LanguageMixin
 from .repository import RepositoryAuthorizationMixin, ApkUploadMixin
 
@@ -60,13 +61,14 @@ class AppDetailView(RepositoryAuthorizationMixin, LanguageMixin, DetailView):
         app = context['app']
         context['screenshots'] = Screenshot.objects.filter(app=app, type=PHONE,
                                                            language_code=self.get_language())
-        context['apks'] = ApkPointer.objects.filter(app=app).order_by('-apk__version_code')
+        context['apks'] = ApkPointer.objects.filter(
+            app=app).order_by('-apk__version_code')
         return context
 
 
 class AppForm(TranslationModelForm):
-    screenshots = ImageField(required=False, widget=ClearableFileInput(attrs={'multiple': True}))
-    apks = FileField(required=False, widget=ClearableFileInput(attrs={'multiple': True}))
+    screenshots = MultipleImageField(required=False)
+    apks = MultipleFileField(required=False)
 
     def __init__(self, *args, **kwargs):
         self.queryset = queryset = App.objects.all()
@@ -89,7 +91,8 @@ class AppForm(TranslationModelForm):
         model = App
         fields = ['summary', 'summary_override', 'description', 'description_override',
                   'author_name', 'website', 'category', 'screenshots', 'feature_graphic', 'apks']
-        widgets = {'description': MDLTinyMCE(), 'description_override': MDLTinyMCE()}
+        widgets = {'description': MDLTinyMCE(
+        ), 'description_override': MDLTinyMCE()}
 
 
 class AppEditView(ApkUploadMixin, LanguageMixin, TemplateResponseMixin, BaseUpdateView):
@@ -114,7 +117,8 @@ class AppEditView(ApkUploadMixin, LanguageMixin, TemplateResponseMixin, BaseUpda
         context['screenshots'] = Screenshot.objects.filter(app=self.get_object(),
                                                            type=PHONE,
                                                            language_code=self.get_language())
-        context['apks'] = ApkPointer.objects.filter(app=self.object).order_by('-apk__version_code')
+        context['apks'] = ApkPointer.objects.filter(
+            app=self.object).order_by('-apk__version_code')
         if self.get_object().tracked_remote:
             # do not allow edits as long as a remote app is tracked
             self.template_name = 'repomaker/app/edit_blocked.html'
@@ -129,7 +133,8 @@ class AppEditView(ApkUploadMixin, LanguageMixin, TemplateResponseMixin, BaseUpda
                     return HttpResponseServerError(self.get_error_msg(added_apks['failed']))
                 self.object = app
                 form = self.get_form()
-                form.add_error('apks', self.get_error_msg(added_apks['failed']))
+                form.add_error('apks', self.get_error_msg(
+                    added_apks['failed']))
                 return self.form_invalid(form)
             if self.request.is_ajax():
                 apk_objects = added_apks['apks']
@@ -235,7 +240,8 @@ class AppTranslationCreateForm(AppForm):
         if not re.match(language_code_re, lang):
             self._errors['lang'] = _('This is not a valid language code.')
         if lang in self.instance.get_available_languages():
-            self._errors['lang'] = _('This language already exists. Please choose another one!')
+            self._errors['lang'] = _(
+                'This language already exists. Please choose another one!')
         return lang
 
     def save(self, commit=True):

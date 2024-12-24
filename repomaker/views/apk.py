@@ -1,15 +1,15 @@
-from django.forms import FileField, ClearableFileInput
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.urls import reverse_lazy
 from django.views.generic.edit import UpdateView, DeleteView
 
 from repomaker.models import Apk, ApkPointer
+from repomaker.views.multiplefileupload import MultipleFileField
 from . import BaseModelForm
 from .repository import RepositoryAuthorizationMixin, ApkUploadMixin
 
 
 class ApkForm(BaseModelForm):
-    apks = FileField(required=False, widget=ClearableFileInput(attrs={'multiple': True}))
+    apks = MultipleFileField(required=False)
 
     class Meta:
         model = Apk
@@ -26,7 +26,8 @@ class ApkUploadView(ApkUploadMixin, UpdateView):
         return HttpResponseNotFound()
 
     def post(self, request, *args, **kwargs):
-        form = self.get_form()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
         if not form.is_valid():
             return self.form_invalid(form)
 

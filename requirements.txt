@@ -1,5 +1,6 @@
 -r debian/requirements.txt
 apache-libcloud>=2.0.0
+androguard==3.3.5
 bleach>=2.1.4, <5.0
 cryptography>=1.4.0
 django >=2.0, <3.0
@@ -8,7 +9,7 @@ django-compressor
 django-modeltranslation >=0.15
 django-js-reverse >=0.9.0
 django-sass-processor
-fdroidserver >=2.0
+fdroidserver==2.3.2
 html5lib >= 1.1, <1.2
 libsass
 python-magic

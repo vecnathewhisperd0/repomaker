@@ -1,6 +1,10 @@
+django >=2.0, <3.0
 pycodestyle
 coverage
 pylint
 pylint-django
 lxml
 cssselect
+django-background-tasks
+django-tinymce
+django-js-reverse

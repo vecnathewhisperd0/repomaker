@@ -166,8 +166,18 @@ class Repository(AbstractRepository):
 
         # Generate repository website
         self._generate_page()
+        self._generate_tmp_folder()
 
         self.save()
+
+    def _generate_tmp_folder(self):
+        #  generates tmp/ folder as seen in index v2 generation
+        #  should be at the same level as repo/ dir
+        repo_path = os.path.join(self.get_repo_path())
+        from pathlib import Path
+        r_path = Path(repo_path)
+        index_v2_tmp = r_path.parent / 'tmp'
+        index_v2_tmp.mkdir()
 
     def _generate_qrcode(self):
         # delete QR code if we don't have a repo URL at the moment
@@ -313,7 +323,14 @@ class Repository(AbstractRepository):
                 logging.warning("App '%s' not found in database", apk['packageName'])
 
         # Scan non-apk files in the repo
-        files, file_cache_changed = update.scan_repo_files(apkcache, REPO_DIR, knownapks, False)
+        try:
+            files, file_cache_changed = update.scan_repo_files(apkcache, REPO_DIR, knownapks, False)  # noqa: E501
+        except fdroidserver.exception.FDroidException as ex:
+            # repo/categories.txt is not in index-v2 supported repo
+            if "'repo/categories.txt' is zero size!" in ex.value:  # noqa: E501
+                repo_categories = os.path.join(REPO_DIR, "categories.txt")
+                os.remove(repo_categories)
+                files, file_cache_changed = update.scan_repo_files(apkcache, REPO_DIR, knownapks, False)  # noqa: E501
 
         # Apply metadata from database
         for file in files:
@@ -339,18 +356,18 @@ class Repository(AbstractRepository):
         update.read_added_date_from_all_apks(apps, apks)
         update.apply_info_from_latest_apk(apps, apks)
 
-        # Sort the app list by name
+        #  Sort the app list by name
         sortedids = sorted(apps.keys(), key=lambda app_id: apps[app_id].Name.upper())
 
-        # Make the index for the repo
+        #  Make the index for the repo
         fdroidserver.make_index(apps, apks, REPO_DIR, False)
-        update.make_categories_txt(REPO_DIR, categories)
+        #  update.make_categories_txt(REPO_DIR, categories)
 
-        # Update cache if it changed
+        #  Update cache if it changed
         if cache_changed or file_cache_changed:
             update.write_cache(apkcache)
 
-        # Update repo page
+        #  Update repo page
         self._generate_page()
 
     def publish(self):

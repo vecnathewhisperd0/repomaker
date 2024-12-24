@@ -24,7 +24,8 @@ from libcloud.storage.types import Provider
 from repomaker.storage import get_identity_file_path, PrivateStorage, REPO_DIR
 from .repository import Repository
 
-UL = '\u00a1-\uffff'  # unicode letters range (must be a unicode string, not a raw string)
+# unicode letters range (must be a unicode string, not a raw string)
+UL = '\u00a1-\uffff'
 
 
 class AbstractStorage(models.Model):
@@ -36,16 +37,32 @@ class AbstractStorage(models.Model):
         raise NotImplementedError()
 
     def get_add_url(self):
-        return reverse_lazy(self.add_url_name, kwargs={'repo_id': self.repo.pk, 'pk': self.pk})
+        return reverse_lazy(
+            self.add_url_name,
+            kwargs={
+                'repo_id': self.repo.pk,
+                'pk': self.pk})
 
     def get_absolute_url(self):
-        return reverse_lazy(self.detail_url_name, kwargs={'repo_id': self.repo.pk, 'pk': self.pk})
+        return reverse_lazy(
+            self.detail_url_name,
+            kwargs={
+                'repo_id': self.repo.pk,
+                'pk': self.pk})
 
     def get_edit_url(self):
-        return reverse_lazy(self.edit_url_name, kwargs={'repo_id': self.repo.pk, 'pk': self.pk})
+        return reverse_lazy(
+            self.edit_url_name,
+            kwargs={
+                'repo_id': self.repo.pk,
+                'pk': self.pk})
 
     def get_delete_url(self):
-        return reverse_lazy(self.delete_url_name, kwargs={'repo_id': self.repo.pk, 'pk': self.pk})
+        return reverse_lazy(
+            self.delete_url_name,
+            kwargs={
+                'repo_id': self.repo.pk,
+                'pk': self.pk})
 
     def get_url(self):
         raise NotImplementedError()
@@ -64,7 +81,10 @@ class S3Storage(AbstractStorage):
     REGION_CHOICES = (
         (Provider.S3, _('US Standard')),
     )
-    region = models.CharField(max_length=32, choices=REGION_CHOICES, default=Provider.S3)
+    region = models.CharField(
+        max_length=32,
+        choices=REGION_CHOICES,
+        default=Provider.S3)
     bucket = models.CharField(max_length=128)
     accesskeyid = models.CharField(max_length=128)
     secretkey = models.CharField(max_length=255)
@@ -99,7 +119,8 @@ class S3Storage(AbstractStorage):
 @deconstructible
 class UsernameValidator(RegexValidator):
     regex = slug_re
-    message = _("Enter a valid user name consisting of letters, numbers, underscores or hyphens.")
+    message = _(
+        "Enter a valid user name consisting of letters, numbers, underscores or hyphens.")
 
 
 @deconstructible
@@ -109,7 +130,8 @@ class HostnameValidator(RegexValidator):
     ipv6_re = r'\[[0-9a-f:\.]+\]'  # (simple regex, validated later)
 
     # Host patterns
-    hostname_re = r'[a-z' + UL + r'0-9](?:[a-z' + UL + r'0-9-]{0,61}[a-z' + UL + r'0-9])?'
+    hostname_re = r'[a-z' + UL + \
+        r'0-9](?:[a-z' + UL + r'0-9-]{0,61}[a-z' + UL + r'0-9])?'
     # Max length for domain name labels is 63 characters per RFC 1034 sec. 3.1
     domain_re = r'(?:\.(?!-)[a-z' + UL + r'0-9-]{1,63}(?<!-))*'
     tld_re = (
@@ -122,7 +144,15 @@ class HostnameValidator(RegexValidator):
     )
     host_re = '(' + hostname_re + domain_re + tld_re + '|localhost)'
 
-    regex = re.compile(r'(?:' + ipv4_re + r'|' + ipv6_re + r'|' + host_re + r')\Z', re.IGNORECASE)
+    regex = re.compile(
+        r'(?:' +
+        ipv4_re +
+        r'|' +
+        ipv6_re +
+        r'|' +
+        host_re +
+        r')\Z',
+        re.IGNORECASE)
     message = _('Enter a valid hostname.')
 
     def __call__(self, value):
@@ -147,11 +177,14 @@ class PathValidator(RegexValidator):
 class AbstractSshStorage(AbstractStorage):
     host = models.CharField(max_length=256, validators=[HostnameValidator()])
     path = models.CharField(max_length=512, validators=[PathValidator()])
-    identity_file = models.FileField(upload_to=get_identity_file_path, storage=PrivateStorage(),
-                                     blank=True)
+    identity_file = models.FileField(
+        upload_to=get_identity_file_path,
+        storage=PrivateStorage(),
+        blank=True)
     public_key = models.TextField(blank=True, null=True)
     url = models.URLField(max_length=2048)
-    disabled = models.BooleanField(default=True)  # overrides default value from parent class
+    # overrides default value from parent class
+    disabled = models.BooleanField(default=True)
 
     def __str__(self):
         return self.get_remote_url()
@@ -191,21 +224,28 @@ class AbstractSshStorage(AbstractStorage):
             format=serialization.PrivateFormat.PKCS8,
             encryption_algorithm=serialization.NoEncryption()  # TODO encrypt
         )
-        self.identity_file.save('id_%d' % self.pk + '_rsa', ContentFile(private_key))
+        self.identity_file.save(
+            'id_%d' %
+            self.pk +
+            '_rsa',
+            ContentFile(private_key))
 
     def publish(self):
         logging.info("Publishing '%s' to %s", self.repo, self)
         config = self.repo.get_config()
         if self.identity_file is not None and self.identity_file != '':
-            path = os.path.join(settings.PRIVATE_REPO_ROOT, self.identity_file.name)
-            config['identity_file'] = path
+            config['identity_file'] = os.path.join(
+                settings.PRIVATE_REPO_ROOT,
+                self.identity_file.name)
 
     class Meta:
         abstract = True
 
 
 class SshStorage(AbstractSshStorage):
-    username = models.CharField(max_length=64, validators=[UsernameValidator()])
+    username = models.CharField(
+        max_length=64, validators=[
+            UsernameValidator()])
     add_url_name = 'storage_ssh_add'
     detail_url_name = 'storage_ssh'
     edit_url_name = 'storage_ssh_update'
@@ -252,13 +292,23 @@ class GitStorage(AbstractSshStorage):
 
     def publish(self):
         super(GitStorage, self).publish()
-        remote = [self.get_remote_url()]  # a list is expected
+        #  a list of dict is expected
+        remote = [{"url": self.get_remote_url()}]
         fdroidserver.update_servergitmirrors(remote, REPO_DIR)
 
 
 class StorageManager:
     # register additional storage models here
-    storage_models = [S3Storage, SshStorage, GitStorage]
+    from .backblaze import B2Storage
+    from .filebase import FilebaseStorage
+    from .rclonesupportedstorage import RcloneStorage
+    storage_models = [
+        S3Storage,
+        SshStorage,
+        GitStorage,
+        B2Storage,
+        FilebaseStorage,
+        RcloneStorage]
 
     @staticmethod
     def get_storage(repo, onlyEnabled=False):
@@ -269,7 +319,8 @@ class StorageManager:
         storage.extend(StorageManager.get_default_storage(repo))
         for storage_type in StorageManager.storage_models:
             if onlyEnabled:
-                objects = storage_type.objects.filter(repo=repo, disabled=False).all()
+                objects = storage_type.objects.filter(
+                    repo=repo, disabled=False).all()
             else:
                 objects = storage_type.objects.filter(repo=repo).all()
             if objects:
@@ -284,7 +335,9 @@ class StorageManager:
         for the given repository :param: repo.
         """
         storage = []
-        if hasattr(settings, 'DEFAULT_REPO_STORAGE') and settings.DEFAULT_REPO_STORAGE:
+        if hasattr(
+                settings,
+                'DEFAULT_REPO_STORAGE') and settings.DEFAULT_REPO_STORAGE:
             for s in settings.DEFAULT_REPO_STORAGE:
                 path = s[0]
                 url = s[1]
@@ -323,7 +376,8 @@ class DefaultStorage:
 
     def get_identifier(self):
         if not self.repo.fingerprint or not settings.SECRET_KEY:
-            raise AssertionError("Repo has no fingerprint or SECRET_KEY missing")
+            raise AssertionError(
+                "Repo has no fingerprint or SECRET_KEY missing")
         identifier_bytes = hmac.new(
             settings.SECRET_KEY.encode(),
             ('repo_fingerprint' + self.repo.fingerprint).encode(),
@@ -348,4 +402,4 @@ class DefaultStorage:
         remote = os.path.join(self.path, self.get_identifier())
         if not os.path.exists(remote):
             os.makedirs(remote)
-        fdroidserver.update_serverwebroot(remote, local)
+        fdroidserver.update_serverwebroot({'url': remote}, local)

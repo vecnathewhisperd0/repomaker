@@ -247,10 +247,38 @@ class RepositoryTestCase(RmTestCase):
             self.assertEqual(repo.description, index['repo']['description'])
 
             # TODO do we expect/want a specific timestamp?
-            timestamp = datetime.utcfromtimestamp(index['repo']['timestamp'] / 1000)
+            timestamp = datetime.fromtimestamp((index['repo']['timestamp'] / 1000), timezone.utc)
             self.assertTrue(datetime_is_recent(timestamp))
             self.assertEqual(repo.url, index['repo']['address'])
             self.assertEqual('icon.png', index['repo']['icon'])
+
+        # assert that index-v2 has been created properly
+        index_path = os.path.join(repo.get_repo_path(), 'index-v2.json')
+        self.assertTrue(os.path.isfile(index_path))
+        with open(index_path, 'r', encoding='UTF-8') as f:
+            index = json.load(f)
+
+            # assert that there are no packages
+            self.assertEqual({}, index['packages'])
+
+            # assert repository metadata is as expected
+            self.assertEqual(repo.name, index['repo']['name']['en-US'])
+            self.assertEqual(repo.description, index['repo']['description']['en-US'])
+
+            # TODO do we expect/want a specific timestamp?
+            timestamp = datetime.fromtimestamp((index['repo']['timestamp'] / 1000), timezone.utc)
+            self.assertTrue(datetime_is_recent(timestamp))
+            self.assertEqual(repo.url, index['repo']['address'])
+            self.assertEqual('/icons/icon.png', index['repo']['icon']['en-US']['name'])
+
+        # assert that entry.json has been created well
+        entry_path = os.path.join(repo.get_repo_path(), 'entry.json')
+        self.assertTrue(os.path.isfile(entry_path))
+        with open(entry_path, 'r', encoding='UTF-8') as f:
+            entry = json.load(f)
+
+            # assert the repository's metadata version matches
+            self.assertEqual(METADATA_VERSION, entry['version'])
 
         # assert that repository homepage was re-created
         _generate_page.called_once_with()

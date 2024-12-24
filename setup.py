@@ -89,7 +89,7 @@ setup(
         'python-magic',
         'qrcode',
         'cryptography>=1.4.0',
-        'fdroidserver>=2.0',
+        'fdroidserver==2.3.2',
     ],
     # List additional groups of dependencies here (e.g. development dependencies).
     # You can install these using the following syntax, for example:
