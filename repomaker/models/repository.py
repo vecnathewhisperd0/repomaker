@@ -324,13 +324,14 @@ class Repository(AbstractRepository):
 
         # Scan non-apk files in the repo
         try:
-            files, file_cache_changed = update.scan_repo_files(apkcache, REPO_DIR, knownapks, False)
+            files, file_cache_changed = update.scan_repo_files(apkcache, REPO_DIR, knownapks, False) # noqa: E501
         except fdroidserver.exception.FDroidException as ex:
             # repo/categories.txt is not in index-v2 supported repo
             if "'repo/categories.txt' is zero size!" in ex.decode("utf-8"):
                 repo_categories = os.path.join(REPO_DIR, "categories.txt")
                 os.remove(repo_categories)
-                files, file_cache_changed = update.scan_repo_files(apkcache, REPO_DIR, knownapks, False)
+                files, file_cache_changed = update.scan_repo_files(apkcache, REPO_DIR, knownapks, False) # noqa: E501
+            raise
 
         # Apply metadata from database
         for file in files:
