@@ -327,7 +327,7 @@ class Repository(AbstractRepository):
             files, file_cache_changed = update.scan_repo_files(apkcache, REPO_DIR, knownapks, False)  # noqa: E501
         except fdroidserver.exception.FDroidException as ex:
             # repo/categories.txt is not in index-v2 supported repo
-            if "'repo/categories.txt' is zero size!" in ex.decode("utf-8"):
+            if "'repo/categories.txt' is zero size!" in ex.value.encode("utf-8"):  # noqa: E501
                 repo_categories = os.path.join(REPO_DIR, "categories.txt")
                 os.remove(repo_categories)
                 files, file_cache_changed = update.scan_repo_files(apkcache, REPO_DIR, knownapks, False)  # noqa: E501
