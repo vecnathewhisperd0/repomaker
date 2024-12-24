@@ -331,7 +331,6 @@ class Repository(AbstractRepository):
                 repo_categories = os.path.join(REPO_DIR, "categories.txt")
                 os.remove(repo_categories)
                 files, file_cache_changed = update.scan_repo_files(apkcache, REPO_DIR, knownapks, False)  # noqa: E501
-            raise
 
         # Apply metadata from database
         for file in files:
