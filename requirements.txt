@@ -2,6 +2,7 @@
 apache-libcloud>=2.0.0
 bleach>=2.1.4, <5.0
 cryptography>=1.4.0
+coverage==7.6.9
 django==4.2.16
 django-background-tasks==1.2.8
 django-allauth==0.44.0
