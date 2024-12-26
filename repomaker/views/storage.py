@@ -107,7 +107,7 @@ class StorageUpdateView(RepositoryAuthorizationMixin, MainStorageMixin, UpdateVi
 class StorageDeleteView(RepositoryAuthorizationMixin, DeleteView):
     template_name = 'repomaker/storage/delete.html'
 
-    def delete(self, request, *args, **kwargs):
+    def form_valid(self, form):
         storage = self.get_object()
         # if this was the main storage, unset the repo URL or promote a different storage
         storage_url = storage.get_repo_url()
