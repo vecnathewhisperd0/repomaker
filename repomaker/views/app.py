@@ -324,12 +324,9 @@ class AppFeatureGraphicDeleteView(RepositoryAuthorizationMixin, DeleteView):
     context_object_name = 'app'
     template_name = 'repomaker/app/feature_graphic_delete.html'
 
-    def delete(self, request, *args, **kwargs):
-        """
-        Deletes the feature graphic of the app and then
-        redirects to the success URL.
-        """
+    def form_valid(self, form):
         self.get_object().feature_graphic.delete()
+        self.get_object().save()
         return HttpResponseRedirect(self.get_success_url())
 
     def get_repo(self):
