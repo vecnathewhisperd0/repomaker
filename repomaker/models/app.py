@@ -8,7 +8,7 @@ from django.dispatch import receiver
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils import timezone, translation
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from fdroidserver import metadata, net
 from modeltranslation.utils import get_language
 
@@ -241,10 +241,10 @@ class App(AbstractApp):
             if language_code not in self.get_available_languages():
                 self.translate(language_code)
 
-            summary = getattr(remote_app, summary_field)
+            summary = getattr(remote_app, summary_field, None)
             if summary:
                 setattr(self, summary_field, summary)
-            description = getattr(remote_app, description_field)
+            description = getattr(remote_app, description_field, None)
             if description:
                 setattr(self, description_field, clean(description))
 

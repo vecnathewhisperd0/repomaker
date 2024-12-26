@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from fdroidserver import update
 from fdroidserver.update import get_all_icon_dirs
 from repomaker.storage import get_apk_file_path, RepoStorage

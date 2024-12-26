@@ -11,7 +11,7 @@ from django.forms import TextInput, ModelForm
 from django.http import Http404, HttpResponseForbidden, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils import formats, translation
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView, ListView
 from django.views.static import serve
 from modeltranslation import settings as modeltranslation_settings
@@ -106,7 +106,7 @@ class AppScrollListView(ListView):
     object_list = None
 
     def get(self, request, *args, **kwargs):
-        if request.is_ajax():
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             self.object_list = self.get_queryset()
             apps = self.get_context_data(**kwargs)['apps']
             apps_json = []

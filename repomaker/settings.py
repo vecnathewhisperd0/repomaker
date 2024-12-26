@@ -12,7 +12,7 @@ import logging
 import os
 
 from django.conf import global_settings
-from django.utils.translation import ugettext_lazy
+from django.utils.translation import gettext_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -195,7 +195,7 @@ MAX_ATTEMPTS = 23  # the number of attempts for marking a task as permanently fa
 # https://docs.djangoproject.com/en/dev/topics/i18n/
 
 LANGUAGE_CODE = 'en'
-LANGUAGES = [('en-us', ugettext_lazy('American English'))] + global_settings.LANGUAGES
+LANGUAGES = [('en-us', gettext_lazy('American English'))] + global_settings.LANGUAGES
 
 # defaults to the value of LANGUAGES
 # for the unit tests to pass, this list need to include at least:

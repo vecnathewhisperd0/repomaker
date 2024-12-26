@@ -22,7 +22,8 @@ from repomaker.storage import REPO_DIR, get_repo_file_path, get_repo_root_path, 
     get_icon_file_path
 from repomaker.tasks import PRIORITY_REPO
 
-REPO_DEFAULT_ICON = os.path.join('repomaker', 'images', 'default-repo-icon.png')
+REPO_DEFAULT_ICON = os.path.join(
+    'repomaker', 'images', 'default-repo-icon.png')
 
 
 class AbstractRepository(models.Model):
@@ -87,6 +88,14 @@ class AbstractRepository(models.Model):
         return config
 
 
+# pylint: disable=W0223
+class DerivedRepository(AbstractRepository):
+    """
+    Derived class for AbstractRepository that can be
+    instantiated at will
+    """
+
+
 class Repository(AbstractRepository):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     qrcode = models.ImageField(upload_to=get_repo_file_path, blank=True)
@@ -99,7 +108,9 @@ class Repository(AbstractRepository):
         return reverse('repo', kwargs={'repo_id': self.pk})
 
     def get_private_path(self):
-        return os.path.join(settings.PRIVATE_REPO_ROOT, get_repo_root_path(self))
+        return os.path.join(
+            settings.PRIVATE_REPO_ROOT,
+            get_repo_root_path(self))
 
     def get_path(self):
         return os.path.join(settings.MEDIA_ROOT, get_repo_root_path(self))
@@ -191,7 +202,11 @@ class Repository(AbstractRepository):
             if self.qrcode:
                 self.qrcode.delete(save=False)
             img.save(f, format='png')
-            self.qrcode.save('assets/qrcode.png', ContentFile(f.getvalue()), False)
+            self.qrcode.save(
+                'assets/qrcode.png',
+                ContentFile(
+                    f.getvalue()),
+                False)
         finally:
             f.close()
 
@@ -200,12 +215,16 @@ class Repository(AbstractRepository):
             return
 
         # Render page to string
-        repo_page_string = render_to_string('repomaker/repo_page/index.html', {'repo': self})
-        repo_page_string = repo_page_string.replace('/static/repomaker/css/repo/', 'assets/')
+        repo_page_string = render_to_string(
+            'repomaker/repo_page/index.html', {'repo': self})
+        repo_page_string = repo_page_string.replace(
+            '/static/repomaker/css/repo/', 'assets/')
 
         # Render qr_code page to string
-        qr_page_string = render_to_string('repomaker/repo_page/qr_code.html', {'repo': self})
-        qr_page_string = qr_page_string.replace('/static/repomaker/css/repo/', '')
+        qr_page_string = render_to_string(
+            'repomaker/repo_page/qr_code.html', {'repo': self})
+        qr_page_string = qr_page_string.replace(
+            '/static/repomaker/css/repo/', '')
 
         with open(os.path.join(self.get_repo_path(), 'index.html'), 'w', encoding='utf8') as f:
             f.write(repo_page_string)  # Write repo page to file
@@ -235,22 +254,35 @@ class Repository(AbstractRepository):
         ]
 
         # Ensure Roboto fonts path exists
-        roboto_font_path = os.path.join(repo_page_assets, 'roboto-fonts', 'roboto')
+        roboto_font_path = os.path.join(
+            repo_page_assets, 'roboto-fonts', 'roboto')
         if not os.path.exists(roboto_font_path):
             os.makedirs(roboto_font_path)
 
         # Add the three needed fonts from Roboto to files
-        roboto_fonts = ['Roboto-Bold.woff2', 'Roboto-Medium.woff2', 'Roboto-Regular.woff2']
+        roboto_fonts = [
+            'Roboto-Bold.woff2',
+            'Roboto-Medium.woff2',
+            'Roboto-Regular.woff2']
         for font in roboto_fonts:
-            source = os.path.join(settings.NODE_MODULES_ROOT, 'roboto-fontface', 'fonts', 'roboto',
-                                  font)
+            source = os.path.join(
+                settings.NODE_MODULES_ROOT,
+                'roboto-fontface',
+                'fonts',
+                'roboto',
+                font)
             target = os.path.join(roboto_font_path, font)
             files.append((source, target))
 
         # Add page graphic assets to files
         icons = ['f-droid.png', 'twitter.png', 'facebook.png']
-        icon_path = os.path.join(settings.BASE_DIR, 'repomaker', 'static', 'repomaker', 'images',
-                                 'repo_page')
+        icon_path = os.path.join(
+            settings.BASE_DIR,
+            'repomaker',
+            'static',
+            'repomaker',
+            'images',
+            'repo_page')
         for icon in icons:
             source = os.path.join(icon_path, icon)
             target = os.path.join(repo_page_assets, icon)
@@ -274,7 +306,9 @@ class Repository(AbstractRepository):
             return  # no need to update a repo twice with same data
         self.update_scheduled = True
         self.save()
-        tasks.update_repo(self.id, priority=PRIORITY_REPO)  # pylint: disable=unexpected-keyword-arg
+        tasks.update_repo(
+            self.id,
+            priority=PRIORITY_REPO)  # pylint: disable=unexpected-keyword-arg
 
     def update(self):
         """
@@ -299,29 +333,40 @@ class Repository(AbstractRepository):
 
         # Process all apks in the main repo
         knownapks = common.KnownApks()
-        apks, cache_changed = update.process_apks(apkcache, REPO_DIR, knownapks, False)
+        apks, cache_changed = update.process_apks(
+            apkcache, REPO_DIR, knownapks, False)
 
         # Apply app metadata from database
         apps = {}
         categories = set()
         for apk in apks:
             try:
-                app = App.objects.get(repo=self, package_id=apk['packageName']).to_metadata_app()
+                app = App.objects.get(
+                    repo=self, package_id=apk['packageName']).to_metadata_app()
                 apps[app.id] = app
                 categories.update(app.Categories)
             except ObjectDoesNotExist:
-                logging.warning("App '%s' not found in database", apk['packageName'])
+                logging.warning(
+                    "App '%s' not found in database",
+                    apk['packageName'])
 
         # Scan non-apk files in the repo
-        files, file_cache_changed = update.scan_repo_files(apkcache, REPO_DIR, knownapks, False)
+        files, file_cache_changed = update.scan_repo_files(
+            apkcache, REPO_DIR, knownapks, False)
 
         # Apply metadata from database
         for file in files:
-            pointers = ApkPointer.objects.filter(repo=self, apk__hash=file['hash'])
+            pointers = ApkPointer.objects.filter(
+                repo=self, apk__hash=file['hash'])
             if not pointers.exists():
-                logging.warning("App with hash '%s' not found in database", file['hash'])
+                logging.warning(
+                    "App with hash '%s' not found in database",
+                    file['hash'])
             elif pointers.count() > 1:
-                logging.error("Repo %d has more than one app with hash '%s'", self.pk, file['hash'])
+                logging.error(
+                    "Repo %d has more than one app with hash '%s'",
+                    self.pk,
+                    file['hash'])
             else:
                 # add app to list of apps to be included in index
                 pointer = pointers[0]
@@ -340,7 +385,9 @@ class Repository(AbstractRepository):
         update.apply_info_from_latest_apk(apps, apks)
 
         # Sort the app list by name
-        sortedids = sorted(apps.keys(), key=lambda app_id: apps[app_id].Name.upper())
+        sortedids = sorted(
+            apps.keys(),
+            key=lambda app_id: apps[app_id].Name.upper())
 
         # Make the index for the repo
         fdroidserver.make_index(apps, apks, REPO_DIR, False)

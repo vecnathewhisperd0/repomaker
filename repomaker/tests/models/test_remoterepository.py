@@ -11,7 +11,7 @@ from requests.exceptions import HTTPError
 
 from repomaker.models import App, Apk, ApkPointer, RemoteApkPointer, RemoteApp, Repository, \
     RemoteRepository
-from repomaker.models.repository import AbstractRepository
+from repomaker.models.repository import DerivedRepository
 from repomaker.storage import get_remote_repo_path
 from repomaker.tasks import PRIORITY_REMOTE_REPO
 from .. import RmTestCase
@@ -29,7 +29,7 @@ class RemoteRepositoryTestCase(RmTestCase):
         self.assertEqual(os.path.join(settings.MEDIA_ROOT, 'remote_repo_1'),
                          self.remote_repo.get_path())
         with self.assertRaises(NotImplementedError):
-            AbstractRepository().get_repo_path()
+            DerivedRepository().get_repo_path()
 
     def test_initial_update(self):
         """

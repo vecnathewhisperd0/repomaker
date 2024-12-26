@@ -33,7 +33,6 @@ RUN echo Etc/UTC > /etc/timezone \
 RUN apt-get update && apt-get dist-upgrade && apt-get install \
 		apache2 \
 		apksigner \
-		fdroidserver \
 		gettext \
 		git \
 		gnupg \
@@ -63,6 +62,7 @@ RUN apt-get update && apt-get dist-upgrade && apt-get install \
 		python3-webview \
 		python3-wheel \
 		rsync \
+        openjdk-17-jdk \
 		s3cmd && \
 	apt-get autoremove --purge && \
 	apt-get clean && \
